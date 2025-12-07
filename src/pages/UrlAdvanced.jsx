@@ -17,26 +17,36 @@ export default function UrlAdvanced() {
   const data = scanResultAdvanced.data;
 
   return (
-    <div className="min-h-screen bg-[#111] text-white px-6 py-10">
-      <img src="/FullLogoBlack.png" alt="logo" className="h-14 sm:h-14 lg:h-20 w-50 ml-45 mb-10" />
+    <div className="min-h-screen bg-[#111] text-white px-4 sm:px-6 py-10">
+      <img
+        src="/FullLogoBlack.png"
+        alt="logo"
+        className="h-16 sm:h-20 w-40 sm:w-52 mb-10 mx-auto"
+      />
 
-      <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)] w-full">
+      <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)] w-full">
+
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
           <h2 className="text-green-500 font-semibold text-lg">Malware Analysis Report</h2>
-          <button className="bg-green-700 hover:bg-green-900 px-5 py-2 rounded-lg font-semibold flex items-center">
+
+          <button className="bg-green-700 hover:bg-green-900 px-5 py-2 rounded-lg font-semibold flex items-center justify-center">
             <Download className="w-5 h-5 mr-2" />
             Download Report
           </button>
         </div>
 
         {/* TABS */}
-        <div className="flex gap-10 border-b border-gray-700 pb-3 mb-8">
-          <Link to="/urlstandard" className="text-gray-500 hover:text-gray-300 cursor-pointer">Standard</Link>
-          <span className="text-white font-semibold border-b-2 border-green-500">Advanced</span>
+        <div className="flex gap-6 border-b border-gray-700 pb-3 mb-8 text-sm sm:text-base">
+          <Link to="/urlstandard" className="text-gray-500 hover:text-gray-300 cursor-pointer">
+            Standard
+          </Link>
+          <span className="text-white font-semibold border-b-2 border-green-500">
+            Advanced
+          </span>
         </div>
 
-   {/* GRID */}
+        {/* GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Summary */}
@@ -50,9 +60,7 @@ export default function UrlAdvanced() {
             )}
 
             <p className="text-gray-400 text-sm mt-4">
-              {data.tls_certificate?.text
-                ? data.tls_certificate.text
-                : "No TLS certificate information found."}
+              {data.tls_certificate?.text || "No TLS certificate information found."}
             </p>
           </div>
 
@@ -63,8 +71,8 @@ export default function UrlAdvanced() {
             {data.screenshot_url ? (
               <img
                 src={data.screenshot_url}
-                alt="screenshot"
-                className="w-full rounded-lg border border-gray-700"
+                alt="Screenshot"
+                className="w-full rounded-lg border border-gray-700 object-contain"
               />
             ) : (
               <p className="text-gray-500 text-sm">No screenshot available.</p>
@@ -144,9 +152,9 @@ export default function UrlAdvanced() {
 
             {data.javascript_variables?.length ? (
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full text-left border-collapse text-sm">
                   <thead>
-                    <tr className="text-gray-400 text-sm border-b border-gray-700">
+                    <tr className="text-gray-400 border-b border-gray-700">
                       <th className="py-2">Variable Name</th>
                       <th className="py-2">Type</th>
                     </tr>
@@ -154,7 +162,7 @@ export default function UrlAdvanced() {
 
                   <tbody>
                     {data.javascript_variables.map((v, i) => (
-                      <tr key={i} className="text-gray-300 text-sm border-b border-gray-800">
+                      <tr key={i} className="text-gray-300 border-b border-gray-800">
                         <td className="py-2">{v.name}</td>
                         <td className="py-2">{v.type}</td>
                       </tr>
@@ -163,7 +171,7 @@ export default function UrlAdvanced() {
                 </table>
               </div>
             ) : (
-              <p className="text-gray-500 text-sm">No JavaScript variables found.</p>
+              <p className="text-gray-500">No JavaScript variables found.</p>
             )}
           </div>
 
@@ -171,4 +179,4 @@ export default function UrlAdvanced() {
       </div>
     </div>
   );
-};
+}

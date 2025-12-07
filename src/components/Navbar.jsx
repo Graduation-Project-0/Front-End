@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hovered, setHovered] = useState(false); // Tooltip state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function Navbar() {
       </ul>
 
       {/* Desktop Buttons */}
-      <div className="hidden md:flex items-center space-x-4">
+      <div className="hidden md:flex items-center space-x-4 relative">
         {!isLoggedIn ? (
           <>
             <Link
@@ -56,15 +57,23 @@ export default function Navbar() {
             </Link>
           </>
         ) : (
-          <>
+          <div className="relative flex items-center">
             {/* Profile Image */}
             <img
-              src="/user.png"
+              src="/profile.png"
               onClick={() => navigate("/dashboard")}
-              className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80"
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
               alt="profile"
             />
-          </>
+            {/* Tooltip */}
+            {hovered && (
+              <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
+                My Profile
+              </div>
+            )}
+          </div>
         )}
       </div>
 
@@ -88,7 +97,7 @@ export default function Navbar() {
           <Link to="/#contact" onClick={() => setIsOpen(false)} className="hover:text-[#1E7D04] transition">Contact</Link>
 
           {/* Mobile Buttons */}
-          <div className="flex flex-col space-y-3 mt-4">
+          <div className="flex flex-col space-y-3 mt-4 relative">
             {!isLoggedIn ? (
               <>
                 <Link
@@ -107,15 +116,22 @@ export default function Navbar() {
                 </Link>
               </>
             ) : (
-              <>
+              <div className="relative flex items-center mx-auto">
                 {/* Profile Image Mobile */}
                 <img
                   src="/user.png"
                   onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
-                  className="w-20 h-20 rounded-full object-cover cursor-pointer mx-auto hover:opacity-80"
+                  onMouseEnter={() => setHovered(true)}
+                  onMouseLeave={() => setHovered(false)}
+                  className="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
                   alt="profile"
                 />
-              </>
+                {hovered && (
+                  <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
+                    My Profile
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

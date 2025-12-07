@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 export default function Services() {
   const services = [
     {
-      
       icon: "/icons/upload.svg",
       title: "File Analyzer",
       desc: "Vanguard analyzes files in real time to detect malware, hidden risks, and malicious content before it reaches your system.",
@@ -14,13 +13,13 @@ export default function Services() {
       icon: "/icons/link.svg",
       title: "Secure Link",
       desc: "Vanguard analyzes URLs in real time to detect malicious patterns, phishing attempts, and hidden risks.",
-      link:"/url",
+      link: "/url",
     },
     {
       icon: "/icons/email.svg",
       title: "Email Check",
       desc: "Vanguard scans every email in real time to detect phishing attempts and hidden risks before they reach your inbox.",
-      link:"/email",
+      link: "/email",
     },
   ];
 
@@ -38,7 +37,19 @@ export default function Services() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-8xl mx-auto px-2">
+      {/* Responsive Grid */}
+      <div
+        className="
+          grid 
+          grid-cols-1 
+          sm:grid-cols-2 
+          lg:grid-cols-3
+          gap-10 
+          max-w-7xl 
+          mx-auto 
+          px-2
+        "
+      >
         {services.map((service, index) => (
           <SingleCard key={index} service={service} index={index} />
         ))}
@@ -68,14 +79,20 @@ function SingleCard({ service, index }) {
   const cardContent = (
     <div
       ref={ref}
-      className={`relative text-center bg-[#0a0a0a]/90 border border-[#1E7D04]/40 rounded-2xl p-8 w-full md:w-[380px] shadow-[0_0_25px_rgba(0,255,0,0.08)] hover:shadow-[0_0_40px_rgba(0,255,0,0.3)] transition-all duration-700 ease-out transform cursor-pointer
+      className={`relative text-center bg-[#0a0a0a]/90 border border-[#1E7D04]/40 rounded-2xl 
+        p-8 w-full shadow-[0_0_25px_rgba(0,255,0,0.08)] 
+        hover:shadow-[0_0_40px_rgba(0,255,0,0.3)] 
+        transition-all duration-700 ease-out transform cursor-pointer
+        flex flex-col justify-between
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       style={{
         transitionDelay: `${index * 150}ms`,
-        minHeight: "380px",
+        minHeight: "360px",
+        maxWidth: "420px",
+        margin: "0 auto",
       }}
     >
-      {/*  (glow aura) */}
+      {/* Glow Aura */}
       <div className="absolute -inset-6 rounded-3xl bg-green-900 blur-[80px] opacity-25 animate-[pulseGlow_4s_ease-in-out_infinite]"></div>
 
       <div className="relative z-10 flex flex-col justify-between h-full">
@@ -94,5 +111,12 @@ function SingleCard({ service, index }) {
       </div>
     </div>
   );
-  return service.link ? <Link to={service.link} className="block">{cardContent}</Link> : cardContent;
+
+  return service.link ? (
+    <Link to={service.link} className="block">
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
+  );
 }
