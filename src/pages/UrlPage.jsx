@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function UrlPage() {
   const [url, setUrl] = useState("");
@@ -8,6 +8,23 @@ export default function UrlPage() {
   const [showInstructions, setShowInstructions] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const target = params.get("target");
+  if (target) {
+    try {
+      const parsedUrl = new URL(target);
+      const baseUrl = `${parsedUrl.protocol}//${parsedUrl.host}`;
+      setUrl(baseUrl);
+    } catch {
+      console.error("Invalid URL in target:", target);
+      setUrl(target); 
+    }
+  }
+}, [location.search]);
+
 
   const handleScan = async () => {
     if (!url) return;

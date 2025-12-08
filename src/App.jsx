@@ -29,7 +29,7 @@ import {AuthProvider}  from './auth/AuthProvider';
 function App() {
   return (
       <AuthProvider>
-    <div className="min-h-screen w-full bg-custom-gradient text-white overflow-x-hidden">
+    <div className="h-full w-full bg-custom-gradient text-white overflow-x-hidden">
       <ScrollToSection />
    
       <Routes>
@@ -58,8 +58,9 @@ function App() {
                 <Route path="/fileadvanced" element={<FileAdvanced />} />
                 <Route path="/urlstandard" element={<UrlStandard />} />
                 <Route path="/urladvanced" element={<UrlAdvanced />} />
-                <Route path="/emailoutput" element={<EmailOutput />} />
+                <Route path="/email-output" element={<EmailOutput />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                
 
       </Routes>
      
