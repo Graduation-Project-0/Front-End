@@ -21,10 +21,17 @@ export default function Navbar() {
 
   return (
     <nav
-      className="flex justify-between items-center px-6 sm:px-8 md:px-10 lg:px-16 py-3 
-      mx-4 sm:mx-8 md:mx-12 lg:mx-16 mt-4 rounded-2xl
-      bg-gradient-to-br from-[#0e0e0e]/70 via-[#063e08]/90 to-gray/95 
-      shadow-[0_0_25px_rgba(0,0,0,0.3)] backdrop-blur-md relative z-50"
+className="flex justify-between items-center
+px-6 sm:px-8 md:px-10 lg:px-16 py-3
+mx-4 sm:mx-8 md:mx-12 lg:mx-16
+relative z-50
+border-b border-green-500/60
+after:content-['']
+after:absolute
+after:left-0 after:right-0 after:bottom-0
+after:h-[12px]
+after:shadow-[0_6px_10px_rgba(34,197,94,0.55)]
+after:pointer-events-none"
     >
       {/* Logo */}
       <div className="flex items-center space-x-2 sm:space-x-3">
@@ -64,12 +71,12 @@ export default function Navbar() {
               onClick={() => navigate("/dashboard")}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
-              className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+              className="w-15 h-15 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
               alt="profile"
             />
             {/* Tooltip */}
             {hovered && (
-              <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
+              <div className="absolute top-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
                 My Profile
               </div>
             )}

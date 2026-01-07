@@ -23,13 +23,16 @@ import EmailOutput from './pages/EmailOutput';
 import Dashboard from './pages/DashBoard';
 import ProtectedRoute from './auth/ProtectedRoute';
 import {AuthProvider}  from './auth/AuthProvider';
+import Layout from './components/Layout';
 
 
 
 function App() {
   return (
       <AuthProvider>
-    <div className="h-full w-full bg-custom-gradient text-white overflow-x-hidden">
+      
+    <div className="h-full w-full overflow-x-hidden">
+<Layout>
       <ScrollToSection />
    
       <Routes>
@@ -37,7 +40,7 @@ function App() {
           path="/"
           element={
             <>
-             <Navbar />
+            
               <HeroSection />
               <About />
               <Services />
@@ -51,10 +54,10 @@ function App() {
                 <Route path="/reset" element={<Reset />} />
                   <Route path="/confirm" element={<ConfirmPass />} />
         <Route path="/verify" element={<VerifyCode />} />
-                <Route path="/file" element={<FilePage /> } />                
+                <Route path="/file" element={ <FilePage />} />                
                 <Route path="/url" element={<UrlPage />} />
                    <Route path="/email" element={<EmailPage />} />
-                <Route path="/filestandard" element={<FileStandard />} />
+                <Route path="/filestandard" element={<Layout> <FileStandard /> </Layout>} />
                 <Route path="/fileadvanced" element={<FileAdvanced />} />
                 <Route path="/urlstandard" element={<UrlStandard />} />
                 <Route path="/urladvanced" element={<UrlAdvanced />} />
@@ -63,8 +66,9 @@ function App() {
                 
 
       </Routes>
-     
+     </Layout>
     </div>
+    
      </AuthProvider>
   );
 }
