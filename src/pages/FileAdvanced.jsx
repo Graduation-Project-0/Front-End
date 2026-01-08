@@ -42,12 +42,12 @@ export default function Advanced() {
   const fileName = result.file_name || sessionStorage.getItem("fileName") || "-";
 
   return (
-    <div className="min-h-screen bg-[#111] text-white px-4 sm:px-6 py-10">
-      <img
+    <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
+      {/* <img
         src="/FullLogoBlack.png"
         alt="logo"
         className="h-16 sm:h-20 w-40 sm:w-52 mb-10 mx-auto"
-      />
+      /> */}
 
       <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
         

@@ -57,14 +57,12 @@ function App() {
                 <Route path="/file" element={ <FilePage />} />                
                 <Route path="/url" element={<UrlPage />} />
                    <Route path="/email" element={<EmailPage />} />
-                <Route path="/filestandard" element={<Layout> <FileStandard /> </Layout>} />
+                <Route path="/filestandard" element={<FileStandard />} />
                 <Route path="/fileadvanced" element={<FileAdvanced />} />
                 <Route path="/urlstandard" element={<UrlStandard />} />
                 <Route path="/urladvanced" element={<UrlAdvanced />} />
                 <Route path="/email-output" element={<EmailOutput />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                
-
       </Routes>
      </Layout>
     </div>
