@@ -21,29 +21,49 @@ export default function Navbar() {
 
   return (
     <nav
-className="flex justify-between items-center
-px-6 sm:px-8 md:px-10 lg:px-16 py-3
-mx-4 sm:mx-8 md:mx-12 lg:mx-16
-relative z-50
-border-b border-green-500/60
-after:content-['']
-after:absolute
-after:left-0 after:right-0 after:bottom-0
-after:h-[12px]
-after:shadow-[0_6px_10px_rgba(34,197,94,0.55)]
-after:pointer-events-none"
+      className="flex justify-between items-center
+                  px-6 sm:px-8 md:px-10 lg:px-16 py-3
+                  mx-4 sm:mx-8 md:mx-12 lg:mx-16
+                  relative z-50
+                  border-b border-[#1E7D04]/60
+                  after:content-['']
+                  after:absolute
+                  after:left-0 after:right-0 after:bottom-0
+                  after:h-[4px]
+                  after:shadow-[0_3px_6px_rgba(30,125,4,0.4)]
+                  after:pointer-events-none"
     >
       {/* Logo */}
       <div className="flex items-center space-x-2 sm:space-x-3">
-        <img src="/FullLogoBlack.png" alt="logo" className="h-14 sm:h-14 lg:h-20 w-50" />
+        <img
+          src="/FullLogoBlack.png"
+          alt="logo"
+          className="h-14 sm:h-14 lg:h-20 w-50"
+        />
       </div>
 
       {/* Desktop Links */}
       <ul className="hidden md:flex space-x-5 lg:space-x-8 text-gray-300 font-medium text-sm lg:text-base">
-        <Link to="/#hero"><li className="hover:text-[#1E7D04] cursor-pointer transition">Home</li></Link>
-        <Link to="/#about"><li className="hover:text-[#1E7D04] cursor-pointer transition">About</li></Link>
-        <Link to="/#services"><li className="hover:text-[#1E7D04] cursor-pointer transition">Services</li></Link>
-        <Link to="/#contact"><li className="hover:text-[#1E7D04] cursor-pointer transition">Contact</li></Link>
+        <Link to="/#hero">
+          <li className="hover:text-[#1E7D04] cursor-pointer transition">
+            Home
+          </li>
+        </Link>
+        <Link to="/#about">
+          <li className="hover:text-[#1E7D04] cursor-pointer transition">
+            About
+          </li>
+        </Link>
+        <Link to="/#services">
+          <li className="hover:text-[#1E7D04] cursor-pointer transition">
+            Services
+          </li>
+        </Link>
+        <Link to="/#contact">
+          <li className="hover:text-[#1E7D04] cursor-pointer transition">
+            Contact
+          </li>
+        </Link>
       </ul>
 
       {/* Desktop Buttons */}
@@ -98,10 +118,34 @@ after:pointer-events-none"
           className="absolute top-[100%] left-0 w-full bg-black/90 backdrop-blur-md border-t border-gray-700 
           flex flex-col items-center space-y-5 py-6 text-gray-300 font-medium text-base animate-fadeIn"
         >
-          <Link to="/#hero" onClick={() => setIsOpen(false)} className="hover:text-[#1E7D04] transition">Home</Link>
-          <Link to="/#about" onClick={() => setIsOpen(false)} className="hover:text-[#1E7D04] transition">About</Link>
-          <Link to="/#services" onClick={() => setIsOpen(false)} className="hover:text-[#1E7D04] transition">Services</Link>
-          <Link to="/#contact" onClick={() => setIsOpen(false)} className="hover:text-[#1E7D04] transition">Contact</Link>
+          <Link
+            to="/#hero"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-[#1E7D04] transition"
+          >
+            Home
+          </Link>
+          <Link
+            to="/#about"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-[#1E7D04] transition"
+          >
+            About
+          </Link>
+          <Link
+            to="/#services"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-[#1E7D04] transition"
+          >
+            Services
+          </Link>
+          <Link
+            to="/#contact"
+            onClick={() => setIsOpen(false)}
+            className="hover:text-[#1E7D04] transition"
+          >
+            Contact
+          </Link>
 
           {/* Mobile Buttons */}
           <div className="flex flex-col space-y-3 mt-4 relative">
@@ -127,7 +171,10 @@ after:pointer-events-none"
                 {/* Profile Image Mobile */}
                 <img
                   src="/user.png"
-                  onClick={() => { navigate("/dashboard"); setIsOpen(false); }}
+                  onClick={() => {
+                    navigate("/dashboard");
+                    setIsOpen(false);
+                  }}
                   onMouseEnter={() => setHovered(true)}
                   onMouseLeave={() => setHovered(false)}
                   className="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
