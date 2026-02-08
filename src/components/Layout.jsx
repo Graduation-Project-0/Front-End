@@ -1,10 +1,18 @@
+import React from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 
-export default function Layout({ children }) {
+const Layout = () => {
   return (
     <>
-      <Navbar />
-      {children}
+      <Navbar /> 
+      <main>
+        {/* الـ Outlet هو اللي بيعرض الصفحات اللي جوه الـ Layout في App.jsx */}
+        <Outlet /> 
+      </main>
     </>
   );
-}
+};
+
+// السطر ده هو اللي ناقص ومسبب الـ SyntaxError
+export default Layout;

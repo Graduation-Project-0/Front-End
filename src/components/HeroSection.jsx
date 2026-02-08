@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   const ref = useRef(null);
@@ -81,11 +82,11 @@ export default function Hero() {
             Get Started
           </button>
 
-          <a href="#work">
-            <button className="cursor-pointer border border-[#1E7D04] text-[#1E7D04] text-lg font-semibold px-10 py-3 rounded-full transition-all duration-300 hover:bg-[#025714] hover:text-white w-full sm:w-auto">
+         
+            <Link to="/#work" className="cursor-pointer border border-[#1E7D04] text-[#1E7D04] text-lg font-semibold px-10 py-3 rounded-full transition-all duration-300 hover:bg-[#025714] hover:text-white w-full sm:w-auto">
               How It Works
-            </button>
-          </a>
+            </Link>
+  
         </div>
       </div>
 

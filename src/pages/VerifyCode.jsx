@@ -1,24 +1,40 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth"; // Assuming you use your auth hook
 
 const VerifyCode = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const inputsRef = useRef([]);
+  const { login } = useAuth(); // To update the global auth state
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get real email
   const email = location.state?.email;
 
-  // If no email was passed → redirect back
   useEffect(() => {
     if (!email) {
-      navigate("/register", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [email, navigate]);
+
+  // --- NEW: Handle Copy-Paste ---
+  const handlePaste = (e) => {
+    const pasteData = e.clipboardData.getData("text").slice(0, 6); // Take first 6 chars
+    if (!/^\d+$/.test(pasteData)) return; // Only allow numbers
+
+    const newCode = [...code];
+    pasteData.split("").forEach((char, index) => {
+      if (index < 6) newCode[index] = char;
+    });
+    setCode(newCode);
+
+    // Focus the last input or the next empty one
+    const lastIndex = Math.min(pasteData.length, 5);
+    inputsRef.current[lastIndex].focus();
+  };
 
   const handleChange = (value, index) => {
     if (/^[0-9]?$/.test(value)) {
@@ -27,7 +43,6 @@ const VerifyCode = () => {
       setCode(newCode);
 
       if (value && index < 5) inputsRef.current[index + 1].focus();
-
       if (error) setError("");
     }
   };
@@ -39,6 +54,10 @@ const VerifyCode = () => {
       inputsRef.current[index + 1].focus();
     } else if (e.key === "ArrowLeft" && index > 0) {
       inputsRef.current[index - 1].focus();
+    } 
+    // --- NEW: Handle Enter Key to Submit ---
+    else if (e.key === "Enter") {
+      handleVerify();
     }
   };
 
@@ -63,31 +82,18 @@ const VerifyCode = () => {
         body: JSON.stringify({ email, code: enteredCode }),
       });
 
-      let data = null;
-      try {
-        data = await response.json();
-      } catch {
-        data = null;
-      }
+      let data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        if (data?.message) {
-          setError(data.message);
-          localStorage.setItem("isLoggedIn", "true");
-navigate("/");
-        } else {
-          setError("Verification failed. Try again.");
-        }
+        setError(data?.message || "Verification failed. Try again.");
         return;
       }
 
-     
+      // --- CRITICAL: Use your login function to set context & localStorage ---
       if (data?.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-   
-      navigate("/", { replace: true });
+        login({ token: data.token, email: email }); 
+        navigate("/", { replace: true });
+      } 
 
     } catch (err) {
       console.error(err);
@@ -110,7 +116,8 @@ navigate("/");
           <span className="text-green-400 font-medium">{email}</span>
         </p>
 
-        <div className="flex justify-center gap-2 md:gap-3 mb-6">
+        {/* Input Group */}
+        <div className="flex justify-center gap-2 md:gap-3 mb-6" onPaste={handlePaste}>
           {code.map((digit, index) => (
             <input
               key={index}
@@ -134,30 +141,12 @@ navigate("/");
           className={`w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]
             ${loading ? "opacity-60 cursor-not-allowed flex items-center justify-center" : "hover:from-[#249605] hover:to-[#0B4001]"}`}
         >
-          {loading ? (
-            <>
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Verifying...
-            </>
-          ) : (
-            "Verify"
-          )}
+          {loading ? "Verifying..." : "Verify"}
         </button>
 
         <div className="mt-4 text-sm text-gray-400">
           Didn't receive the code?
-          <button
-            className="text-green-500 hover:text-green-400 font-medium ml-1 transition-colors duration-200"
-            disabled={loading}
-          >
+          <button className="text-green-500 hover:text-green-400 font-medium ml-1 transition-colors duration-200">
             Resend
           </button>
         </div>

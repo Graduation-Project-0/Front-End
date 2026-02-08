@@ -116,7 +116,7 @@ export default function EmailPage() {
         <button
           onClick={handleScan}
           disabled={!file || loading}
-          className="block text-center mt-8 w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="block text-center mt-8 ml-20 w-3/4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Scanning..." : "Scan"}
         </button>

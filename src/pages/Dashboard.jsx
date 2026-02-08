@@ -1,8 +1,10 @@
 import React from "react";
+import { logout } from "../services/auth";
+import { useNavigate } from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
   Home,
   FileText,
-  Link,
   Mail,
   HelpCircle,
   LogOut,
@@ -11,15 +13,31 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+const handleLogout = async () => {
+  try {
+    await logout();
+  } catch (e) {
+    console.log(e);
+  } finally {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
+};
+
   return (
     <div className="min-h-screen flex bg-[#0a0a0a] text-white">
 
       {/* =========================== SIDEBAR =========================== */}
       <aside className="w-64 bg-[#0d140d] border-r border-[#1a1f1a] p-6 flex flex-col max-md:hidden">
+
         {/* Logo */}
         <div className="flex items-center gap-3 mb-12">
           <img src="/logo-green.svg" className="w-10" alt="" />
-          <h2 className="text-2xl font-bold text-green-500 tracking-wide">VANGUARD</h2>
+          <h2 className="text-2xl font-bold text-green-500 tracking-wide">
+            VANGUARD
+          </h2>
         </div>
 
         {/* Nav */}
@@ -33,13 +51,21 @@ export default function Dashboard() {
 
         {/* Logout */}
         <div className="mt-auto">
-          <NavItem icon={<LogOut size={20} />} label="Logout" red />
+          <NavItem
+            icon={<LogOut size={20} />}
+            label="Logout"
+            red
+            onClick={handleLogout}
+          />
         </div>
 
         {/* Upgrade Button */}
-        <button className="mt-4 bg-green-600 text-black py-3 rounded-xl font-semibold hover:bg-green-500 transition">
-          Upgrade to Go
-        </button>
+ <Link 
+  to="/plans" 
+  className="relative z-10 block mt-4 bg-green-600 text-black py-3 rounded-xl font-semibold hover:bg-green-500 transition text-center"
+>
+  Upgrade to Go
+</Link>
       </aside>
 
       {/* =========================== MAIN CONTENT =========================== */}
@@ -60,7 +86,11 @@ export default function Dashboard() {
               <p className="font-semibold">Eslam Abbas</p>
               <p className="text-xs text-gray-400">Malware Analyst</p>
             </div>
-            <img src="/user.png" className="w-12 h-12 rounded-full object-cover" />
+            <img
+              src="/user.png"
+              className="w-12 h-12 rounded-full object-cover"
+              alt=""
+            />
           </div>
         </header>
 
@@ -73,13 +103,21 @@ export default function Dashboard() {
 
           {/* Security Ring Card */}
           <div className="bg-[#0f0f10] p-6 rounded-2xl border border-[#1f1f21] shadow-[0_0_20px_rgba(0,255,0,0.05)]">
-            <h3 className="text-center text-gray-400 mb-4">Overall Security Detect</h3>
+            <h3 className="text-center text-gray-400 mb-4">
+              Overall Security Detect
+            </h3>
 
-            {/* CIRCLE */}
             <div className="flex justify-center mb-4">
               <div className="relative w-40 h-40">
                 <svg className="w-full h-full transform -rotate-90">
-                  <circle cx="80" cy="80" r="60" stroke="#333" strokeWidth="14" fill="none" />
+                  <circle
+                    cx="80"
+                    cy="80"
+                    r="60"
+                    stroke="#333"
+                    strokeWidth="14"
+                    fill="none"
+                  />
                   <circle
                     cx="80"
                     cy="80"
@@ -105,7 +143,6 @@ export default function Dashboard() {
               <span className="text-green-500">• Clean</span>
             </div>
           </div>
-
         </section>
 
         {/* Main Content Grid */}
@@ -121,7 +158,6 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* CHART */}
             <div className="mt-4 h-64 bg-[#111] rounded-xl border border-[#222] relative">
               <img
                 src="/chart-green.png"
@@ -160,11 +196,13 @@ export default function Dashboard() {
     </div>
   );
 }
-// components
 
-function NavItem({ icon, label, active, red }) {
+/* ===================== Components ===================== */
+
+function NavItem({ icon, label, active, red, onClick }) {
   return (
     <li
+      onClick={onClick}
       className={`
         flex items-center gap-3 cursor-pointer text-lg
         ${active ? "text-green-500" : red ? "text-red-500" : "text-gray-300"}
@@ -196,7 +234,11 @@ function TableRow({ item, type, result }) {
     <tr className="border-b border-[#222]">
       <td className="py-2 text-gray-300">{item}</td>
       <td className="py-2 text-gray-400">{type}</td>
-      <td className={`py-2 font-semibold ${result === "Threat" ? "text-red-500" : "text-green-500"}`}>
+      <td
+        className={`py-2 font-semibold ${
+          result === "Threat" ? "text-red-500" : "text-green-500"
+        }`}
+      >
         • {result}
       </td>
     </tr>

@@ -88,7 +88,7 @@ function SingleCard({ service, index }) {
       style={{
         transitionDelay: `${index * 150}ms`,
         minHeight: "360px",
-        maxWidth: "420px",
+        maxWidth: "620px",
         margin: "0 auto",
       }}
     >

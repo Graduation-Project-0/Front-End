@@ -126,15 +126,9 @@ export default function FilePage() {
         <button
           onClick={handleScan}
           disabled={!file || isScanning}
-          className={`w-full max-w-md mx-auto py-3 rounded-xl font-semibold text-white text-center 
-            ${
-              isScanning
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] cursor-pointer"
-            } 
-            transition-all duration-300`}
+          className="block text-center mt-8 ml-20 w-3/4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isScanning ? "Scanning..." : "Scan File"}
+          {isScanning ? "Scanning..." : "Scan"}
         </button>
       </div>
 
@@ -143,7 +137,59 @@ export default function FilePage() {
         {showInstructions && (
           <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-80 md:w-96 shadow-[0_0_25px_rgba(0,255,0,0.3)] animate-[fadeIn_0.3s_ease-out] mb-4">
             <ol className="space-y-4 text-left text-sm md:text-base">
-              {/* ... نفس تعليمات الملف ... */}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  1
+                </span>{" "}
+                <p>
+                 Locate the .exe file you downloaded (must be Windows executable)
+                </p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  2
+                </span>{" "}
+                <p>Do NOT run or open the file yet, scan it first for safety</p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  3
+                </span>{" "}
+                <p>Visit our File Scan service page</p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  4
+                </span>{" "}
+                <p>
+                 Click 'Choose File' or drag and drop your .exe file
+                </p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  5
+                </span>{" "}
+                <p>Ensure file size is under 100MB (larger files not supported)</p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  6
+                </span>{" "}
+                <p>Click 'Scan File' to upload and start analysis</p>{" "}
+              </li>{" "}
+              <li className="flex items-start gap-3">
+                {" "}
+                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-600 font-bold text-black text-sm">
+                  7
+                </span>{" "}
+                <p>Wait 10-30 seconds for multi-engine scanning to complete'</p>{" "}
+              </li>{" "}
             </ol>
           </div>
         )}
@@ -154,13 +200,6 @@ export default function FilePage() {
           className="w-15 h-15 border rounded-full bg-green-900 cursor-pointer hover:scale-110 transition-transform duration-300"
         />
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }

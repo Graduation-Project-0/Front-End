@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext"; // 👈 1. استيراد useAuth
+import { useAuth } from "../hooks/useAuth"; // 👈 1. استيراد useAuth
 import { User } from "lucide-react";
 
 export default function Login() {
@@ -48,28 +48,23 @@ export default function Login() {
         data = {};
       }
 
-      if (response.ok) {
-        if (data.token) {
-          // ⚠️ ملاحظة: الآن أنتِ تستخدمين login() من Context
-          // وهذا يعني أنك لم تعدي بحاجة لحفظ token و isLoggedIn يدوياً في localStorage هنا
-          
-          // يمكنك إرسال بيانات المستخدم بالكامل إلى دالة login() 
-          // (يجب أن تحتوي على الأقل على: id, email, و token)
-          const userData = {
-            id: data.user_id || 'guest', // تأكدي من أن الـ API يعيد الـ ID
-            email: email, 
+  // جوه الـ handleLogin اللي عندك في الكود الأصلي
+if (response.ok) {
+    if (data.token) {
+        // البيانات اللي هتحفظيها في الـ Context
+        const userData = {
+            id: data.user_id || "guest",
+            email: email,
             token: data.token,
-          };
-          
-          login(userData); // 👈 3. استدعاء دالة Context.login لحفظ الحالة في Context و localStorage
-        }
-        
-        // لاحظي: التوجيه لصفحة التحقق (VerifyCode) قد يكون جزء من سير العمل الخاص بك
-        // لكن إذا كان المستخدم قام بالفعل بتسجيل الدخول بنجاح، يجب توجيهه إلى Dashboard
-        // إذا كان هذا المسار هو جزء من "تأكيد ثنائي" (2FA) قبل الدخول الفعلي، فاحتفظي به.
-        navigate("/verify", { state: { email } }); 
-        
-      } else {
+        };
+console.log("Data to be saved:", userData); // شوفي دي في الكونسول
+    login(userData);
+        login(userData); // 👈 السطر ده هو اللي هيخلي الـ ProtectedRoute يفتح
+    }
+    
+    // التوجيه لصفحة الـ Verify زي ما إنتي عاملة بالظبط
+    navigate("/verify", { state: { email } });
+} else {
         setError(data.message);
       }
     } catch (err) {
@@ -115,7 +110,10 @@ export default function Login() {
               className="w-full px-4 py-2 rounded-md bg-transparent border-b border-gray-700 focus:border-[#1E7D04] outline-none text-gray-200 placeholder-gray-500 focus:placeholder-transparent"
             />
             <div className="text-right mt-2">
-              <Link to="/reset" className="text-xs text-[#1E7D04] hover:underline">
+              <Link
+                to="/reset"
+                className="text-xs text-[#1E7D04] hover:underline"
+              >
                 Forget Password?
               </Link>
             </div>
@@ -128,7 +126,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`block w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]
+            className={`cursor-pointer block w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]
               ${loading ? "opacity-50 cursor-not-allowed" : "hover:opacity-80"}
             `}
           >
@@ -149,21 +147,21 @@ export default function Login() {
         <div className="flex justify-center space-x-4">
           <button
             onClick={() => handleSocialLogin("google")}
-            className="bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
+            className=" cursor-pointer bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
           >
             <FaGoogle size={18} />
           </button>
 
           <button
             onClick={() => handleSocialLogin("facebook")}
-            className="bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
+            className=" cursor-pointer bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
           >
             <FaFacebookF size={18} />
           </button>
 
           <button
             onClick={() => handleSocialLogin("twitter")}
-            className="bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
+            className=" cursor-pointer bg-[#0e0e0e] border border-gray-700 hover:border-[#1E7D04] hover:text-[#1E7D04] p-3 rounded-lg transition-all duration-300"
           >
             <FaTwitter size={18} />
           </button>
