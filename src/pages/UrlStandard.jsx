@@ -45,12 +45,16 @@ export default function UrlStandard() {
 
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-          <h2 className="text-green-500 font-semibold text-xl">Malware Analysis Report</h2>
+          <h2 className="text-green-500 font-semibold text-xl">
+            Malware Analysis Report
+          </h2>
 
-          <button 
+          <button
             disabled={!data}
             className={`px-5 py-2 rounded-lg font-semibold flex items-center justify-center transition-colors ${
-              data ? "bg-green-700 hover:bg-green-900 cursor-pointer" : "bg-gray-800 text-gray-500 cursor-not-allowed"
+              data
+                ? "bg-green-700 hover:bg-green-900 cursor-pointer"
+                : "bg-gray-800 text-gray-500 cursor-not-allowed"
             }`}
           >
             <Download className="w-5 h-5 mr-2" />
@@ -63,6 +67,7 @@ export default function UrlStandard() {
           <span className="text-white font-semibold border-b-2 border-green-500">
             Standard
           </span>
+
           <Link
             to="/urladvanced"
             className="text-gray-500 hover:text-gray-300 cursor-pointer"
@@ -79,36 +84,52 @@ export default function UrlStandard() {
             <img
               src={isSafe ? SafeIcon : MalwareIcon}
               alt="Status Icon"
-              className={`w-20 h-20 sm:w-24 sm:h-24 transition-opacity duration-500 ${!data ? "opacity-20 grayscale" : "opacity-100"}`}
+              className={`w-20 h-20 sm:w-24 sm:h-24 transition-opacity duration-500 ${
+                !data ? "opacity-20 grayscale" : "opacity-100"
+              }`}
             />
           </div>
 
           {/* Status Text Display */}
           <h2
             className={`text-xl sm:text-2xl font-bold mb-4 transition-colors duration-500 ${
-              !data ? "text-gray-600" : isSafe ? "text-green-500" : "text-red-500"
+              !data
+                ? "text-gray-600"
+                : isSafe
+                ? "text-green-500"
+                : "text-red-500"
             }`}
           >
-            {!data ? "Waiting for Scan Result..." : isSafe ? "This URL Is Safe" : "This URL Is Malicious"}
+            {!data
+              ? "Waiting for Scan Result..."
+              : isSafe
+              ? "This URL Is Safe"
+              : "This URL Is Malicious"}
           </h2>
 
           {/* Detailed Description */}
           <p className="text-gray-400 max-w-md mx-auto mb-10 leading-relaxed text-sm sm:text-base">
-            {!data 
+            {!data
               ? "Please enter a URL in the scan page and start the scan to see the analysis report."
               : isSafe
-                ? "Our Analysis Confirms This URL is Genuine and Free From Threats."
-                : "WARNING: This URL is dangerous. Do NOT visit it."}
+              ? "Our Analysis Confirms This URL is Genuine and Free From Threats."
+              : "WARNING: This URL is dangerous. Do NOT visit it."}
           </p>
 
           {/* Score Visual Circle */}
           <div className="flex justify-center">
             <div
               className="rounded-full border-[8px] sm:border-[10px] flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 transition-all duration-700"
-              style={{ borderColor: !data ? "#222" : isSafe ? "#00ff00" : "#ff0000" }}
+              style={{
+                borderColor: !data ? "#222" : isSafe ? "#00ff00" : "#ff0000",
+              }}
             >
               <div className="text-center">
-                <p className={`text-3xl font-bold transition-colors ${!data ? "text-gray-700" : "text-white"}`}>
+                <p
+                  className={`text-3xl font-bold transition-colors ${
+                    !data ? "text-gray-700" : "text-white"
+                  }`}
+                >
                   {score}%
                 </p>
                 <p className="text-gray-500 text-sm italic">Malicious</p>

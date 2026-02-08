@@ -53,6 +53,7 @@ export default function Advanced() {
 
       </div>
 
+
       <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
         
         {/* Header */}
