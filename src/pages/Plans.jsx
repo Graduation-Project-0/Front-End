@@ -123,7 +123,7 @@ const Plans = () => {
 
   return (
     // Fixed height to prevent scrolling and stretch content
-    <div className="h-full bg-black text-white p-6 overflow-hidden flex flex-col">
+    <div className="h-full bg-black text-white p-6 flex flex-col">
       <div className="max-w-[98%] mx-auto w-full h-full flex flex-col justify-center">
         
         {/* Grid setup for 5 long cards */}

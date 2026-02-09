@@ -84,16 +84,17 @@ export default function Navbar() {
             </Link>
           </>
         ) : (
-          <div className="relative flex items-center">
+          <div className="cursor-pointer relative flex items-center">
             {/* Profile Image */}
             <img
               src="/profile.png"
               onClick={() => navigate("/dashboard")}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
-              className="w-15 h-15 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
+              className="w-11 h-11 rounded-full border-2 border-green-500/50 p-0.5"
               alt="profile"
             />
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
             {/* Tooltip */}
             {hovered && (
               <div className="absolute top-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">
