@@ -33,7 +33,7 @@ import { AuthProvider } from "./context/AuthContext";
 function App() {
   return (
     <AuthProvider>
-      <div className="h-full w-full overflow-x-hidden">
+      <div className="h-full w-full overflow-x-hidden pt-20">
         <ScrollToSection />
 
         <Routes>

@@ -26,7 +26,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="min-h-screen py-20 text-white relative overflow-hidden to-black px-6 md:px-40"
+      className="min-h-screen pt-20 text-white relative overflow-hidden to-black px-6 md:px-40"
     >
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]">
@@ -42,9 +42,9 @@ export default function Services() {
         className="
           grid 
           grid-cols-1 
-          sm:grid-cols-2 
+          sm:grid-cols-2
           lg:grid-cols-3
-          gap-10 
+          gap-7 
           max-w-7xl 
           mx-auto 
           px-2

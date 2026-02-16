@@ -21,18 +21,20 @@ export default function Navbar() {
 
   return (
     <nav
-      className="flex justify-between items-center
-                  px-6 sm:px-8 md:px-10 lg:px-16 py-3
-                  mx-4 sm:mx-8 md:mx-12 lg:mx-16
-                  relative z-50
-                  border-b border-[#1E7D04]/60
-                  after:content-['']
-                  after:absolute
-                  after:left-0 after:right-0 after:bottom-0
-                  after:h-[4px]
-                  after:shadow-[0_3px_6px_rgba(30,125,4,0.4)]
-                  after:pointer-events-none"
-    >
+className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] 
+             w-[95%] sm:w-[90%] md:w-[85%] lg:w-[95%] 
+             bg-black/80 backdrop-blur-md flex justify-between items-center
+             px-6 sm:px-8 md:px-10 lg:px-16 py-2
+             mt-0 
+             rounded-2xl
+             border-b border-[#1E7D04]/60
+             after:content-['']
+             after:absolute
+             after:left-0 after:right-0 after:bottom-0
+             after:h-[4px]
+             after:shadow-[0_3px_6px_rgba(30,125,4,0.4)]
+             after:pointer-events-none"
+>
       {/* Logo */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         <img

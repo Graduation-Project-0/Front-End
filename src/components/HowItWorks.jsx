@@ -1,133 +1,99 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from 'react';
+import { ChevronDown } from 'lucide-react'; 
 
-const steps = [
-  {
-    title: "Instant Analysis",
-    desc: "Scan, analyze, and detect threats instantly with AI-powered precision.",
-    side: "left",
-  },
-  {
-    title: "Submit Your Content",
-    desc: "Upload or paste anything — our intelligent engine auto-detects type and analyzes securely.",
-    side: "right",
-  },
-  {
-    title: "Choose Your Service",
-    desc: "Select between File, Email, or Link scanning — all processed with real-time defense.",
-    side: "left",
-  },
-];
+const HowItWorks = () => {
+  const [openIndex, setOpenIndex] = useState(null);
 
-export default function HowItWorks() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const [visible, setVisible] = useState([]);
-
-  const refs = useRef([]);
-
-  useEffect(() => {
-    const handleMove = (e) => setMouse({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  useEffect(() => {
-    const observers = refs.current.map((el, i) => {
-      if (!el) return null;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            setTimeout(() => {
-              setVisible((prev) => {
-                const updated = [...prev];
-                updated[i] = true;
-                return updated;
-              });
-            }, i * 400); 
-            observer.unobserve(el);
-          }
-        },
-        { threshold: 0.3 }
-      );
-      observer.observe(el);
-      return observer;
-    });
-
-    return () => observers.forEach((obs) => obs && obs.disconnect());
-  }, []);
+  const faqs = [
+    {
+      question: "How is Vanguard different from traditional antivirus software?",
+      answer: "Traditional antivirus solutions mainly rely on signature-based detection and focus on executable files only.\n\nVanguard goes beyond that by using AI-driven analysis to detect unknown threats, analyze code, scan URLs and emails, inspect Python libraries, and even detect hidden malicious data inside media files — all without executing suspicious content."
+    },
+    {
+      question: "Does Vanguard rely on running files to detect threats?",
+      answer: "No. Vanguard follows a static-first analysis approach.\n\nFiles, code, emails, and media are analyzed without execution, preventing accidental activation of malicious payloads and keeping the user’s system safe during inspection."
+    },
+    {
+      question: "Can Vanguard detect zero-day and previously unseen attacks?",
+      answer: "Yes. Vanguard uses a hybrid AI framework combining deep learning and traditional machine learning.\n\nThis allows the system to recognize malicious patterns and anomalies rather than relying only on known signatures, making it effective against zero-day and emerging threats."
+    },
+    {
+      question: "What types of threats can Vanguard detect?",
+      answer: "Vanguard protects against a wide range of threats, including:\n\n• Malware and malicious executables\n• Phishing and malicious URLs\n• Email-based attacks and social engineering\n• Vulnerable and malicious code\n• Compromised Python libraries (supply-chain attacks)\n• Hidden data and steganographic payloads in images, audio, and video\n\nAll results are correlated through a centralized analysis system for deeper insight."
+    },
+    {
+      question: "Who is Vanguard designed for?",
+      answer: "Vanguard is built for users who need more than basic protection:\n\n• Developers and IT professionals dealing with code and dependencies\n• Security-conscious individuals handling sensitive data\n• Small and medium-sized businesses (SMBs) that need enterprise-level protection without enterprise complexity."
+    }
+  ];
 
   return (
-    <section
-      id="work"
-      className="relative text-gray-200 py-28 px-6 overflow-hidden font-inter"
-    >
-      {/*cursor glow */}
-      <div
-        className="pointer-events-none fixed -z-0 h-96 w-96 rounded-full bg-green-500 opacity-10 blur-3xl"
-        style={{
-          left: mouse.x - 200,
-          top: mouse.y - 200,
-          transition: "transform 0.2s ease-out",
-        }}
-      ></div>
+    <section id="work" className="h-full bg-black text-white pt-8 md:p-20 flex items-center">
+      <div className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        
+        {/* Left Side: Header & Image */}
+        <div className="space-y-12">
+          <div className="space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] py-2">
+              How It Works
+            </h1>
+            <p className="text-gray-400 text-lg leading-relaxed max-w-md">
+              Security is a process, not a product. Learn everything you need to 
+              know about taking the right steps to reach your destination.
+            </p>
+          </div>
 
-      {/* text*/}
-      <header className="relative z-10 text-center mb-20">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]">
-          How It Works
-        </h1>
-        <p className="text-gray-400 max-w-2xl mx-auto mt-4 text-base md:text-lg">
-          Security is a process, not a product. Learn everything you need to
-          know about taking the right steps to reach your destination.
-        </p>
-      </header>
+          <div className="relative group ">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  bg-green-500/10 blur-[120px] pointer-events-none transition-opacity group-hover:opacity-100 opacity-50" />
+            <img 
+              src="/laptop.png" 
+              alt="Vanguard Dashboard on Laptop" 
+            className="relative z-10 w-full lg:w-[60%] max-w-none transform scale-110 lg:scale-120 transition-transform duration-700 ease-out drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)]"
+            />
+          </div>
+        </div>
 
-      {/*  main line */}
-      <div className="relative max-w-6xl mx-auto flex justify-center">
-        <div className="absolute top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#1E7D04] via-green-500/80 to-[#1E7D04] shadow-[0_0_25px_rgba(30,125,4,0.7)]"></div>
-
-        <div className="flex flex-col space-y-40 w-full">
-          {steps.map((step, index) => (
-            <div
+        {/* Right Side: Accordion */}
+        <div className="space-y-6 "> 
+         
+          {faqs.map((faq, index) => (
+            <div 
               key={index}
-              ref={(el) => (refs.current[index] = el)}
-              className={`relative flex ${
-                step.side === "left"
-                  ? "justify-start md:pr-[55%]"
-                  : "justify-end md:pl-[55%]"
-              }`}
+              className="border border-green-900/70 rounded-2xl overflow-hidden bg-zinc-950/80 backdrop-blur-md transition-all duration-300 hover:border-green-500/60"
             >
-              {/* card*/}
-              <div
-                className={`relative bg-[#0a0a0a]/90 border border-[#1E7D04]/40 rounded-2xl p-8 w-full md:w-[380px] shadow-[0_0_25px_rgba(0,255,0,0.08)] hover:shadow-[0_0_40px_rgba(0,255,0,0.3)] transition-all duration-700 ease-out transform
-                  ${
-                    visible[index]
-                      ? "opacity-100 translate-x-0"
-                      : step.side === "left"
-                      ? "opacity-0 -translate-x-16"
-                      : "opacity-0 translate-x-16"
-                  }`}
+              <button
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                className="w-full p-6 flex items-center justify-between text-left transition-colors"
               >
-                <h3 className="text-2xl font-semibold text-green-400 mb-4">
-                  {step.title}
-                </h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  {step.desc}
-                </p>
-              </div>
-
-              {/* lines*/}
-              <div
-                className={`absolute top-1/2 w-[25%] h-[2px] bg-gradient-to-l from-green-400/70 to-transparent shadow-[0_0_15px_rgba(74,222,128,0.6)] hidden md:block ${
-                  step.side === "left" ? "left-[25%]" : "right-[25%] rotate-180"
+                <span className={`font-semibold text-lg pr-4 transition-colors ${openIndex === index ? 'text-green-400' : 'text-gray-200'}`}>
+                  {faq.question}
+                </span>
+                <ChevronDown 
+                  className={`text-green-500 shrink-0 transition-transform duration-500 ease-in-out ${
+                    openIndex === index ? 'rotate-180' : ''
+                  }`} 
+                  size={24}
+                />
+              </button>
+              
+              <div 
+                className={`transition-all duration-500 ease-in-out ${
+                  openIndex === index ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
                 }`}
-              ></div>
-
-              {/* circles */}
-              <div className="absolute left-1/2 -translate-x-1/2 top-1/2 w-5 h-5 rounded-full bg-green-400 shadow-[0_0_20px_rgba(74,222,128,0.7)] border border-white/10 hidden md:block"></div>
+              >
+                <div className="p-6 pt-0 border-t border-green-900/20">
+                  <p className="text-gray-400 leading-relaxed whitespace-pre-line text-sm md:text-base">
+                    {faq.answer}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );
-}
+};
+
+export default HowItWorks;

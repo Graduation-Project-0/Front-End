@@ -157,7 +157,7 @@ export default function Dashboard() {
               </button>
             </div>
             
-            {/* الحاوية الخاصة بالشارت */}
+            {/* chart */}
             <div className="h-[280px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data}>
