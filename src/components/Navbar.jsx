@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <nav
-className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] 
+      className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] 
              w-[95%] sm:w-[90%] md:w-[85%] lg:w-[95%] 
              bg-black/80 backdrop-blur-md flex justify-between items-center
              px-6 sm:px-8 md:px-10 lg:px-16 py-2
@@ -34,7 +34,7 @@ className="fixed top-0 left-1/2 -translate-x-1/2 z-[100]
              after:h-[4px]
              after:shadow-[0_3px_6px_rgba(30,125,4,0.4)]
              after:pointer-events-none"
->
+    >
       {/* Logo */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         <img
@@ -96,7 +96,7 @@ className="fixed top-0 left-1/2 -translate-x-1/2 z-[100]
               className="w-11 h-11 rounded-full border-2 border-green-500/50 p-0.5"
               alt="profile"
             />
-              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
             {/* Tooltip */}
             {hovered && (
               <div className="absolute top-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs font-semibold px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">

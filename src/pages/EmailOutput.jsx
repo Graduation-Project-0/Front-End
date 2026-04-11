@@ -25,13 +25,24 @@ const EmailOutput = ({ apiData }) => {
   }, [apiData]);
 
   const isSpam = data?.prediction === "Spam";
-  const spamScore = data?.confidence ?? (data ? (isSpam ? 80 : 20) : 0);
+  const rawConf = data?.confidence != null ? Number(data.confidence) : null;
+  const spamScore = rawConf != null 
+    ? Math.round(rawConf <= 1 ? rawConf * 100 : rawConf) 
+    : (data ? (isSpam ? 80 : 20) : 0);
   const numUrls = data?.num_urls ?? 0;
   const numFiles = data?.num_files ?? 0;
-  const numImages = data?.num_images ?? 0;
+  const numImages = (data?.num_images ?? 0) + (data?.image_urls?.length ?? 0);
   const urls = data?.urls || [];
-  const files = data?.files || [];
-  const images = data?.images || [];
+
+  // Normalize files: backend may return plain strings ["file.pdf"] or objects [{filename, download_url, ...}]
+  const files = (data?.files || []).map((f) =>
+    typeof f === "string" ? { filename: f, download_url: null, encoded_file: null } : f
+  );
+
+  // Normalize images: backend may return plain strings ["img.png"] or objects [{filename, encoded_image, download_url}]
+  const images = (data?.images || []).map((img) =>
+    typeof img === "string" ? { filename: img, download_url: null, encoded_image: null } : img
+  );
 
   // تحديد الروابط اللي هتظهر (أول 5 لو مش ضاغط Read More)
   const displayedUrls = showAllUrls ? urls : urls.slice(0, 5);
@@ -112,13 +123,15 @@ const EmailOutput = ({ apiData }) => {
                   <li key={i} className="flex justify-between items-center p-1 hover:bg-white/5 rounded">
                     <span
                       className="text-green-400 underline hover:text-green-500 cursor-pointer"
-                      onClick={() => window.location.href = `/file?target=${encodeURIComponent(file.download_url)}`}
+                      onClick={() => file.download_url && (window.location.href = `/file?target=${encodeURIComponent(file.download_url)}`)}
                     >
                       {file.filename}
                     </span>
-                    <a href={file.download_url} download className="text-green-400 underline hover:text-green-500 ml-2">
-                      Download
-                    </a>
+                    {file.download_url && (
+                      <a href={file.download_url} download className="text-green-400 underline hover:text-green-500 ml-2">
+                        Download
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -132,15 +145,35 @@ const EmailOutput = ({ apiData }) => {
         {/* ----------- Images Section ----------- */}
         <div className="bg-[#111] p-6 rounded-xl border border-gray-800 mt-8">
           <h3 className="text-green-400 font-semibold mb-3">Images ({numImages})</h3>
-          {images.length === 0 ? (
-            <p className="text-gray-500 text-sm italic text-center py-4">No embedded images found in this email.</p>
+          {images.length === 0 && (!data?.image_urls || data.image_urls.length === 0) ? (
+            <p className="text-gray-500 text-sm italic text-center py-4">No images found in this email.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Embedded/attached images */}
               {images.map((img, i) => (
-                <div key={i} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
+                <div key={`attached-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
                   <p className="text-gray-300 text-sm mb-2 truncate">{img.filename}</p>
-                  <img src={`data:image/png;base64,${img.encoded_image}`} alt={img.filename} className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain" />
-                  <a href={img.download_url} className="text-green-400 underline text-sm block mt-2 hover:text-green-300">Download Image</a>
+                  {img.encoded_image ? (
+                    <img src={`data:image/png;base64,${img.encoded_image}`} alt={img.filename} className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain" />
+                  ) : (
+                    <p className="text-gray-500 text-xs italic">Preview not available</p>
+                  )}
+                  {img.download_url && (
+                    <a href={img.download_url} className="text-green-400 underline text-sm block mt-2 hover:text-green-300">Download Image</a>
+                  )}
+                </div>
+              ))}
+              {/* External images from HTML img tags */}
+              {(data?.image_urls || []).map((url, i) => (
+                <div key={`external-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
+                  <img
+                    src={url}
+                    alt={`Image ${i + 1}`}
+                    className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain"
+                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
+                  />
+                  <p className="text-gray-500 text-xs italic hidden">Failed to load image</p>
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-green-400 underline text-xs block mt-2 hover:text-green-300 truncate">{url}</a>
                 </div>
               ))}
             </div>
@@ -153,7 +186,11 @@ const EmailOutput = ({ apiData }) => {
             {!data ? "Waiting for Scan..." : isSpam ? "This Email is Spam" : "This Email is Not Spam"}
           </h2>
           <p className="text-gray-300 max-w-xl mx-auto mb-10 text-sm">
-            {!data ? "The result of the spam analysis..." : isSpam ? "Warning: This email..." : "This email appears legitimate..."}
+            {!data 
+              ? "The result of the malware and spam analysis will appear here shortly. Please wait while we process the email content." 
+              : isSpam 
+              ? "Warning: This email has been flagged as spam or potentially malicious. Exercise extreme caution and do not interact with any links or download any attachments." 
+              : "This email appears legitimate and safe based on our scan. However, always remain vigilant and verify the sender's identity if you are unsure."}
           </p>
           <div className="flex justify-center">
             <div className="w-40 h-40 rounded-full border-[10px] flex items-center justify-center transition-all duration-500" style={{ borderColor: !data ? "#333" : isSpam ? "#ff0000" : "#00ff00" }}>

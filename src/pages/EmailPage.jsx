@@ -133,7 +133,9 @@ export default function EmailPage() {
               Prediction: {result.data?.prediction}
             </p>
             <p className="text-gray-300">
-              Confidence: {result.data?.confidence ?? "N/A"}
+              Confidence: {result.data?.confidence != null 
+                ? `${Math.round(result.data.confidence <= 1 ? result.data.confidence * 100 : result.data.confidence)}%` 
+                : "N/A"}
             </p>
             <p className="text-gray-300">Images: {result.data?.num_images}</p>
             <p className="text-gray-300">URLs: {result.data?.num_urls}</p>

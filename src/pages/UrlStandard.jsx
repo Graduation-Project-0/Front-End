@@ -23,9 +23,14 @@ export default function UrlStandard() {
     return () => clearTimeout(timer);
   }, []);
 
+  // ... داخل المكون ...
   const hasData = data !== null;
-  const isMalicious = hasData && (data.is_malicious === true || data.probability_malicious > 0.4);
-  const score = data ? Math.round(data.probability_malicious * 100) : 0;
+
+  const rawScore = data?.confidence || 0;
+  const score =
+    rawScore <= 1 ? Math.round(rawScore * 100) : Math.round(rawScore);
+
+  const isMalicious = hasData && data?.is_safe === false;
 
   if (loading) {
     return (
@@ -38,7 +43,6 @@ export default function UrlStandard() {
   return (
     <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
       <div className="max-w-4xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
-
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
           <h2 className="text-green-500 font-semibold text-xl">
             Malware Analysis Report
@@ -70,7 +74,6 @@ export default function UrlStandard() {
         </div>
 
         <div className="bg-[#111] rounded-xl p-6 sm:p-10 shadow-inner text-center">
-
           <div className="flex justify-center mb-6">
             <img
               src={isMalicious ? MalwareIcon : SafeIcon}
@@ -86,44 +89,45 @@ export default function UrlStandard() {
               !hasData
                 ? "text-gray-600"
                 : isMalicious
-                ? "text-red-500"
-                : "text-green-500"
+                  ? "text-red-500"
+                  : "text-green-500"
             }`}
           >
             {!hasData
               ? "Waiting for Scan Result..."
               : isMalicious
-              ? "This URL Is Malicious"
-              : "This URL Is Safe"}
+                ? "This URL Is Malicious"
+                : "This URL Is Safe"}
           </h2>
 
           <p className="text-gray-400 max-w-md mx-auto mb-10 leading-relaxed text-sm sm:text-base">
             {!hasData
               ? "Please enter a URL in the scan page and start the scan to see the analysis report."
               : isMalicious
-              ? "WARNING: This URL is dangerous. Do NOT visit it."
-              : "Our Analysis Confirms This URL is Genuine and Free From Threats."}
+                ? "WARNING: This URL is dangerous. Do NOT visit it."
+                : "Our Analysis Confirms This URL is Genuine and Free From Threats."}
           </p>
 
           <div className="flex justify-center">
             <div
               className={`rounded-full border-[10px] flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 transition-all duration-700 ${
-                !hasData 
-                  ? "border-zinc-800" 
-                  : isMalicious 
-                  ? "border-red-600 shadow-[0_0_20px_rgba(220,38,38,0.2)]" 
-                  : "border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]"
+                !hasData
+                  ? "border-zinc-800"
+                  : isMalicious
+                    ? "border-red-600 shadow-[0_0_20px_rgba(220,38,38,0.2)]"
+                    : "border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.2)]"
               }`}
             >
               <div className="text-center">
-                <p className={`text-3xl font-bold transition-colors ${!hasData ? "text-gray-700" : "text-white"}`}>
+                <p
+                  className={`text-3xl font-bold transition-colors ${!hasData ? "text-gray-700" : "text-white"}`}
+                >
                   {score}%
                 </p>
-                <p className="text-gray-500 text-sm italic">Malicious</p>
+                <p className="text-gray-500 text-sm italic">Confidence</p>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
