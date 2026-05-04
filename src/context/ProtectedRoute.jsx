@@ -3,8 +3,6 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
-  
-  console.log("Auth Check:", { isAuthenticated, loading, user: localStorage.getItem("user") });
 
   // 1. حالة التحميل
   if (loading) {

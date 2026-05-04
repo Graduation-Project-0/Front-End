@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function Reset() {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ export default function Reset() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/forgot-password", {
+      const response = await fetch(apiUrl(ENDPOINTS.FORGOT_PASSWORD), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

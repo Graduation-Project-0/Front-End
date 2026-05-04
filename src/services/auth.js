@@ -1,11 +1,6 @@
-export const logout = async () => {
-  const token = localStorage.getItem("token");
+import api from "../api/axios";
+import { ENDPOINTS } from "../config/endpoints";
 
-  return fetch("http://127.0.0.1:8000/api/v1/logout", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+export const logout = async () => {
+  return api.post(ENDPOINTS.LOGOUT);
 };

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 // ضيفي الأقواس هنا ✅
-import { AuthContext } from '../context/AuthContext'; 
+import { AuthContext } from '../context/authContext'; 
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

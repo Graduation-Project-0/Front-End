@@ -28,7 +28,7 @@ export default function Hero() {
   return (
     <section
       ref={ref}
-      id="hero"
+      id="home"
       className="
         min-h-screen 
         flex 

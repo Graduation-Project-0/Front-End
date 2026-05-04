@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function FilePage() {
   const [file, setFile] = useState(null);
@@ -49,15 +50,17 @@ export default function FilePage() {
     const token = localStorage.getItem("token");
 
     try {
-      const standardReq = fetch(
-        "http://127.0.0.1:8000/api/v1/standard/scan-file",
-        { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData }
-      );
+      const standardReq = fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_FILE), {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
-      const advancedReq = fetch(
-        "http://127.0.0.1:8000/api/v1/advanced/scan-file",
-        { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData }
-      );
+      const advancedReq = fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_FILE), {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
       const [standardRes, advancedRes] = await Promise.all([standardReq, advancedReq]);
       const standardData = await standardRes.json();
@@ -126,16 +129,16 @@ export default function FilePage() {
         <button
           onClick={handleScan}
           disabled={!file || isScanning}
-          className="block text-center mt-8 ml-20 w-3/4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+         className="w-full max-w-xs mx-auto block py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isScanning ? "Scanning..." : "Scan"}
         </button>
       </div>
 
       {/* Instructions button */}
-      <div className="absolute bottom-10 right-10 z-10 flex flex-col items-end">
-        {showInstructions && (
-          <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-80 md:w-96 shadow-[0_0_25px_rgba(0,255,0,0.3)] animate-[fadeIn_0.3s_ease-out] mb-4">
+      <div className="fixed bottom-6 right-4 z-10 flex flex-col items-end">
+  {showInstructions && (
+    <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-[min(22rem,90vw)] shadow-[0_0_25px_rgba(0,255,0,0.3)] animate-[fadeIn_0.3s_ease-out] mb-4 max-h-[70vh] overflow-y-auto">
             <ol className="space-y-4 text-left text-sm md:text-base">
               <li className="flex items-start gap-3">
                 {" "}

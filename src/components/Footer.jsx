@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import NavBrandLink from "./NavBrandLink";
 import {
   FaFacebookF,
   FaInstagram,
@@ -53,10 +54,9 @@ export default function Footer() {
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 md:gap-20 text-center md:text-left">
         {/* Logo & Description */}
         <div className="md:w-1/3 flex flex-col items-center md:items-start">
- <div className="flex items-center space-x-2 sm:space-x-3">
-        <img src="/FullLogoBlack.png" alt="logo" className="h-14 sm:h-14 lg:h-20 w-50" />
-
-      </div>   
+          <div className="flex items-center justify-center md:justify-start">
+            <NavBrandLink />
+          </div>
           <p className="text-gray-400 text-md leading-relaxed max-w-xs mx-auto md:mx-0">
             Your digital shield for instant threat detection and secure data
             analysis.

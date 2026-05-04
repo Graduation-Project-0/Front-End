@@ -122,18 +122,14 @@ const Plans = () => {
   ];
 
   return (
-    // Fixed height to prevent scrolling and stretch content
-    <div className="h-full bg-black text-white p-6 flex flex-col">
-      <div className="max-w-[98%] mx-auto w-full h-full flex flex-col justify-center">
-        
-        {/* Grid setup for 5 long cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 h-[95%] items-stretch">
-          {plans.map((plan, index) => (
-            <div 
-              key={index} 
-              // Added h-full and flex-grow to make cards as long as possible
-              className="relative bg-[#0d0d0d] border-2 border-green-900/30 rounded-[1.5rem] p-6 flex flex-col transition-all duration-300 hover:border-green-900 hover:shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_15px_rgba(34,197,94,0.1)] group h-full"
-            >
+      <div className="min-h-screen bg-black text-white px-6 py-12 overflow-y-auto">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {plans.map((plan, index) => (
+              <div
+                key={index}
+                className="relative bg-[#0d0d0d] border-2 border-green-900/30 rounded-[1.5rem] p-6 flex flex-col transition-all duration-300 hover:border-green-900 hover:shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_15px_rgba(34,197,94,0.1)] group"
+              >
               {/* Icons only for Essential, Premium, and B2B */}
               {plan.icon && (
                 <div className="absolute -top-7 -left-3 w-16 h-16 z-10 transition-transform group-hover:scale-110">

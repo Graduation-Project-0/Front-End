@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function UrlPage() {
   const [url, setUrl] = useState("");
@@ -35,7 +36,7 @@ useEffect(() => {
     try {
       const token = localStorage.getItem("token");
 
-      const standardReq = fetch("http://127.0.0.1:8000/api/v1/standard/scan-url", {
+      const standardReq = fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_URL), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +45,7 @@ useEffect(() => {
         body: JSON.stringify({ url }),
       });
 
-      const advancedReq = fetch("http://127.0.0.1:8000/api/v1/advanced/scan-url", {
+      const advancedReq = fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_URL), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,11 +71,11 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen text-white relative overflow-hidden">
+    <div className="min-h-screen text-white relative overflow-x-hidden">
 
       <div className="absolute inset-0 bg-[url('/service.png')] bg-cover bg-center"></div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center mt-28 px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20">
 
         <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent italic mb-4">
           Behind every link lies a story,
@@ -105,9 +106,9 @@ useEffect(() => {
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
 
-      <div className="absolute bottom-10 right-10 z-10 flex flex-col items-end">
-        {showInstructions && (
-          <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-80 md:w-96 shadow-[0_0_25px_rgba(0,255,0,0.3)] mb-4 animate-[fadeIn_0.3s_ease-out]">
+      <div className="fixed bottom-6 right-4 z-10 flex flex-col items-end">
+  {showInstructions && (
+    <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-[min(22rem,90vw)] shadow-[0_0_25px_rgba(0,255,0,0.3)] mb-4 animate-[fadeIn_0.3s_ease-out]">
             <ol className="space-y-4 text-left text-sm md:text-base">
               {[
                 "Copy any suspicious URL from emails, messages, or social media",

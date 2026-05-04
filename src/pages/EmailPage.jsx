@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function EmailPage() {
   const [file, setFile] = useState(null);
@@ -35,16 +36,13 @@ export default function EmailPage() {
       const formData = new FormData();
       formData.append("email", file); // ← اسم الحقل الصحيح
 
-      const res = await fetch(
-        "http://127.0.0.1:8000/api/v1/standard/scan-email",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+      const res = await fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_EMAIL), {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
       if (!res.ok) {
         const serverReply = await res.text();
@@ -116,7 +114,7 @@ export default function EmailPage() {
         <button
           onClick={handleScan}
           disabled={!file || loading}
-          className="block text-center mt-8 ml-20 w-3/4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full max-w-xs mx-auto block mt-8 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-green-800 hover:opacity-90 shadow-[0_0_20px_rgba(0,255,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Scanning..." : "Scan"}
         </button>
@@ -143,10 +141,9 @@ export default function EmailPage() {
         )}
       </div>
       {/* Instructions */}{" "}
-      <div className="absolute bottom-10 right-10 z-10 flex flex-col items-end">
-        {" "}
-        {showInstructions && (
-          <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-80 md:w-96 shadow-[0_0_25px_rgba(0,255,0,0.3)] mb-4 animate-[fadeIn_0.3s_ease-out]">
+      <div className="fixed bottom-6 right-4 z-10 flex flex-col items-end">
+  {showInstructions && (
+    <div className="bg-[#0c0f0c] border border-green-700 rounded-2xl p-6 w-[min(22rem,90vw)] shadow-[0_0_25px_rgba(0,255,0,0.3)] mb-4 animate-[fadeIn_0.3s_ease-out] max-h-[70vh] overflow-y-auto">
             {" "}
             <ol className="space-y-4 text-left text-sm md:text-base">
               {" "}

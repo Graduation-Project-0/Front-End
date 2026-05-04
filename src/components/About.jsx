@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import HomeLogoLink from "./HomeLogoLink";
 
 const About = () => {
   return (
@@ -9,7 +10,7 @@ const About = () => {
 
       {/* Main Header */}
       <header className="relative z-10 mb-12 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] py-2">
+        <h1 className="landing-section-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] py-2">
           Guardians of The Digital Frontier
         </h1>
       </header>
@@ -40,11 +41,13 @@ const About = () => {
 
             <div className="absolute inset-0 bg-green-500/10 rounded-full blur-[100px] animate-pulse" />
             
-            <img 
-              src="/Big Logo.svg" 
-              alt="Vanguard Shield Logo" 
-              className="relative w-72 md:w-[450px] drop-shadow-[0_0_35px_rgba(34,150,94,0.5)] transition-transform duration-700 group-hover:scale-105"
-            />
+            <HomeLogoLink className="relative block">
+              <img
+                src="/Big Logo.svg"
+                alt="Vanguard Shield Logo"
+                className="relative w-72 md:w-[450px] drop-shadow-[0_0_35px_rgba(34,150,94,0.5)] transition-transform duration-700 group-hover:scale-105"
+              />
+            </HomeLogoLink>
           </div>
         </div>
 

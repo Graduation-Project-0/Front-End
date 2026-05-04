@@ -1,8 +1,7 @@
 import React from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
-// Components & Pages
 import HeroSection from "./components/HeroSection";
 import About from "./components/About";
 import Services from "./components/Services";
@@ -23,51 +22,53 @@ import FileAdvanced from "./pages/FileAdvanced";
 import UrlStandard from "./pages/UrlStandard";
 import UrlAdvanced from "./pages/UrlAdvanced";
 import EmailOutput from "./pages/EmailOutput";
-import Dashboard from "./pages/DashBoard";
+import Dashboard from "./pages/Dashboard";
 import Plans from "./pages/Plans";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import VerifyEmail from "./pages/verifyEmail";
+import VerifyEmailNotice from "./pages/VerifyEmailNotice";
 
-// Context & Protection
 import ProtectedRoute from "./context/ProtectedRoute";
-import { AuthProvider } from "./context/AuthContext";
 
-function App() {
+function AppInner() {
+  const location = useLocation();
+
+  const noWrapperRoutes = ["/dashboard", "/login", "/signup", "/plans", "/file", "/url", "/email"];
+  const isNoWrapper = noWrapperRoutes.includes(location.pathname);
+
   return (
-    <AuthProvider>
-      <div className="h-full w-full overflow-x-hidden pt-20">
-        <ScrollToSection />
+    <div className={isNoWrapper ? "min-h-screen w-full overflow-x-hidden" : "h-full w-full overflow-x-hidden pt-20"}>
+      <ScrollToSection />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/reset" element={<Reset />} />
+        <Route path="/confirm" element={<ConfirmPass />} />
+        <Route path="/verify" element={<VerifyCode />} />
+        <Route path="/plans" element={<Plans />} />
 
-        <Routes>
-          {/* 1. مسارات متاحة للجميع (Public) وبدون Layout */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/reset" element={<Reset />} />
-          <Route path="/confirm" element={<ConfirmPass />} />
-          <Route path="/verify" element={<VerifyCode />} />
-          <Route path="/plans" element={<Plans />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/email-verified" element={<VerifyEmail />} />
+          <Route path="/verify-email-notice" element={<VerifyEmailNotice />} />
 
-          {/* 2. مسارات محمية (Protected) */}
-          <Route element={<ProtectedRoute />}>
-            
-            {/* داشبورد محمية وبدون Layout */}
-            <Route path="/dashboard" element={<Dashboard />} />
-
-            {/* مسارات محمية وبتحتاج Layout */}
-            <Route element={<Layout />}>
-              <Route path="/file" element={<FilePage />} />
-              <Route path="/url" element={<UrlPage />} />
-              <Route path="/email" element={<EmailPage />} />
-              <Route path="/filestandard" element={<FileStandard />} />
-              <Route path="/fileadvanced" element={<FileAdvanced />} />
-              <Route path="/urlstandard" element={<UrlStandard />} />
-              <Route path="/urladvanced" element={<UrlAdvanced />} />
-              <Route path="/email-output" element={<EmailOutput />} />
-            </Route>
-
-          </Route>
-
-          {/* 3. مسارات متاحة للجميع ولكن بـ Layout */}
           <Route element={<Layout />}>
-            <Route path="/" element={
+            <Route path="/file" element={<FilePage />} />
+            <Route path="/url" element={<UrlPage />} />
+            <Route path="/email" element={<EmailPage />} />
+            <Route path="/filestandard" element={<FileStandard />} />
+            <Route path="/fileadvanced" element={<FileAdvanced />} />
+            <Route path="/urlstandard" element={<UrlStandard />} />
+            <Route path="/urladvanced" element={<UrlAdvanced />} />
+            <Route path="/email-output" element={<EmailOutput />} />
+          </Route>
+        </Route>
+
+        <Route element={<Layout />}>
+          <Route
+            path="/"
+            element={
               <>
                 <HeroSection />
                 <About />
@@ -75,14 +76,16 @@ function App() {
                 <HowItWorks />
                 <Footer />
               </>
-            } />
-
-          </Route>
-
-        </Routes>
-      </div>
-    </AuthProvider>
+            }
+          />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+        </Route>
+      </Routes>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return <AppInner />;
+}

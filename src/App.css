@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Font from `public/fonts` — logo wordmark + selected landing section titles */
+@font-face {
+  font-family: "Gargoyles";
+  src: url("/fonts/gargoyles-extracted/Gargoyles.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+  max-width: 100%;
+}
 html,
 body,
 #root {
@@ -121,4 +133,59 @@ body,
 
 .animate-fadeIn{
   animation:fadeIn .3s ease-out;
+}
+
+/* Navbar wordmark: /Logo.png + “ANGUARD” */
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.12rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.nav-logo:hover .nav-logo-text {
+  color: #22c55e;
+}
+
+.nav-logo-icon {
+  height: 2.25rem;
+  width: auto;
+  max-width: 3rem;
+  object-fit: contain;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .nav-logo-icon {
+    height: 2.65rem;
+    max-width: 3.25rem;
+  }
+}
+
+.nav-logo-text {
+  font-family: "Gargoyles", system-ui, sans-serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.92);
+  transition: color 0.2s ease;
+}
+
+/* About, Services, How It Works — main section titles only */
+.landing-section-title {
+  font-family: "Gargoyles", system-ui, sans-serif;
+}
+
+.nav-logo--compact .nav-logo-icon {
+  height: 1.65rem;
+  max-width: 2.25rem;
+}
+
+.nav-logo--compact .nav-logo-text {
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
 }

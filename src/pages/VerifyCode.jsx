@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth"; // Assuming you use your auth hook
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 const VerifyCode = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -73,7 +74,7 @@ const VerifyCode = () => {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/verify-otp", {
+      const response = await fetch(apiUrl(ENDPOINTS.VERIFY_OTP), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +92,19 @@ const VerifyCode = () => {
 
       // --- CRITICAL: Use your login function to set context & localStorage ---
       if (data?.token) {
-        login({ token: data.token, email: email }); 
+        const pendingName = (() => {
+          try {
+            return localStorage.getItem("pendingName") || "";
+          } catch {
+            return "";
+          }
+        })();
+        login({ token: data.token, email: email, name: data?.user?.name || pendingName || "User" }); 
+        try {
+          localStorage.removeItem("pendingName");
+        } catch {
+          // ignore
+        }
         navigate("/", { replace: true });
       } 
 

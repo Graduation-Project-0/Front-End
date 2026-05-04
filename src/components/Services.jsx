@@ -29,7 +29,7 @@ export default function Services() {
       className="min-h-screen pt-20 text-white relative overflow-hidden to-black px-6 md:px-40"
     >
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]">
+        <h2 className="landing-section-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]">
           Advanced Security Services
         </h2>
         <p className="text-gray-400 mt-3">
