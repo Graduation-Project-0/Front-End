@@ -5,10 +5,11 @@ import Navbar from "./Navbar";
 const Layout = () => {
   return (
     <>
-      <Navbar /> 
-      <main>
-        {/* الـ Outlet هو اللي بيعرض الصفحات اللي جوه الـ Layout في App.jsx */}
-        <Outlet /> 
+      <Navbar />
+      <main className="flex w-full min-w-0 justify-center overflow-x-hidden">
+        <div className="w-full min-w-0 max-w-[100vw]">
+          <Outlet />
+        </div>
       </main>
     </>
   );

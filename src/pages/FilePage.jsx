@@ -86,10 +86,11 @@ export default function FilePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black items-center text-white px-4 pt-20 relative">
-      <div className="absolute inset-0 bg-[url('/service.png')] bg-cover bg-center"></div>
+    <div className="relative flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden bg-black pt-20 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[url('/service.png')] bg-cover bg-center" />
 
-      <div className="relative z-10 text-center max-w-2xl w-full">
+      <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full min-w-0 max-w-2xl shrink-0 pb-24 pt-8 text-center md:w-[min(42rem,100%)] md:pt-12">
         <h1 className="text-3xl font-semibold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent italic mb-4">
           Vanguard scans every file in real time
         </h1>
@@ -98,7 +99,7 @@ export default function FilePage() {
         </p>
 
         <div
-          className="border border-green-800/50 rounded-2xl p-10 mb-8 bg-black/40 hover:bg-black/50 transition-all cursor-pointer"
+          className="mb-8 cursor-pointer rounded-2xl border border-green-800/50 bg-black/40 p-6 transition-all hover:bg-black/50 sm:p-10"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -133,6 +134,7 @@ export default function FilePage() {
         >
           {isScanning ? "Scanning..." : "Scan"}
         </button>
+        </div>
       </div>
 
       {/* Instructions button */}

@@ -1,9 +1,20 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Hero() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      navigate({ pathname: "/", hash: "services" });
+    } else {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     const el = ref.current;
@@ -30,15 +41,22 @@ export default function Hero() {
       ref={ref}
       id="home"
       className="
-        min-h-screen 
-        flex 
-        flex-col-reverse 
-        md:flex-row 
-        justify-center 
-        items-center 
-        text-white 
-        px-4 sm:px-8 md:px-20
-        pt-10 md:pt-0
+        mx-auto
+        flex
+        min-h-screen
+        w-full
+        max-w-[100vw]
+        flex-col-reverse
+        items-center
+        justify-center
+        overflow-x-hidden
+        px-4
+        pt-10
+        text-white
+        sm:px-8
+        md:flex-row
+        md:px-20
+        md:pt-0
       "
     >
       {/* LEFT TEXT */}
@@ -78,12 +96,16 @@ export default function Hero() {
           justify-center md:justify-start 
           pb-8
         ">
-          <button className="cursor-pointer bg-gradient-to-r from-[#1E7D04] to-[#0A3301] text-white text-lg font-semibold px-10 py-3 rounded-full transition-all duration-300 hover:opacity-70 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={handleGetStarted}
+            className="cursor-pointer landing-section-title bg-gradient-to-r from-[#1E7D04] to-[#0A3301] text-white text-xl sm:text-2xl font-semibold px-10 py-3.5 rounded-full transition-all duration-300 hover:opacity-70 w-full sm:w-auto"
+          >
             Get Started
           </button>
 
          
-            <Link to="/#work" className="cursor-pointer border border-[#1E7D04] text-[#1E7D04] text-lg font-semibold px-10 py-3 rounded-full transition-all duration-300 hover:bg-[#025714] hover:text-white w-full sm:w-auto">
+            <Link to="/#work" className="cursor-pointer landing-section-title border border-[#1E7D04] text-[#1E7D04] text-xl sm:text-2xl font-semibold px-10 py-3 rounded-full transition-all duration-300 hover:bg-[#025714] hover:text-white w-full sm:w-auto">
               How It Works
             </Link>
   
@@ -92,11 +114,15 @@ export default function Hero() {
 
       {/* RIGHT IMAGE */}
       <div
-        className={`flex-1 flex justify-center md:justify-end mt-10 md:mt-0 transform transition-all duration-1000 ease-out delay-200 
+        className={`mt-10 flex flex-1 justify-center md:mt-0 md:justify-end transform transition-all duration-1000 ease-out delay-200
           ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}
         `}
       >
- <img src="/virus.png" alt="Cyber virus" className=" w-[260px] sm:w-[360px] md:w-[520px] lg:w-[700px] object-contain animate-pulse " />
+        <img
+          src="/virus.png"
+          alt="Cyber virus"
+          className="h-auto max-w-full object-contain animate-pulse [width:min(92vw,260px)] sm:[width:min(90vw,360px)] md:w-[520px] lg:w-[700px]"
+        />
       </div>
     </section>
   );

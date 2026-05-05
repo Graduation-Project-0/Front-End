@@ -34,11 +34,32 @@ import ProtectedRoute from "./context/ProtectedRoute";
 function AppInner() {
   const location = useLocation();
 
-  const noWrapperRoutes = ["/dashboard", "/login", "/signup", "/plans", "/file", "/url", "/email"];
-  const isNoWrapper = noWrapperRoutes.includes(location.pathname);
+  const noWrapperRoutes = [
+    "/dashboard",
+    "/login",
+    "/signup",
+    "/plans",
+    "/file",
+    "/url",
+    "/email",
+    "/verify",
+    "/reset",
+    "/confirm",
+  ];
+  const path =
+    location.pathname.length > 1 && location.pathname.endsWith("/")
+      ? location.pathname.slice(0, -1)
+      : location.pathname;
+  const isNoWrapper = noWrapperRoutes.includes(path);
 
   return (
-    <div className={isNoWrapper ? "min-h-screen w-full overflow-x-hidden" : "h-full w-full overflow-x-hidden pt-20"}>
+    <div
+      className={
+        isNoWrapper
+          ? "min-h-screen w-full min-w-0"
+          : "min-h-full w-full min-w-0 max-w-[100vw] overflow-x-hidden pt-20"
+      }
+    >
       <ScrollToSection />
       <Routes>
         <Route path="/login" element={<Login />} />

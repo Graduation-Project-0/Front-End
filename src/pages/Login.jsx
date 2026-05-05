@@ -76,8 +76,9 @@ export default function Login() {
   };
 
   return (
-    <section className="min-h-screen w-full flex justify-center items-center from-black via-[#0b160b] to-[#032004] text-white px-4 py-10 overflow-y-auto">
-      <div className="bg-[#111111]/70 backdrop-blur-md border border-[#1E7D04]/40 rounded-2xl shadow-[0_0_25px_rgba(0,255,0,0.1)] p-8 md:p-10 w-full max-w-md text-center animate-fadeUp">
+    <section className="flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-x-hidden overflow-y-auto bg-gradient-to-b from-black via-[#0b160b] to-[#032004] py-10 text-white">
+      <div className="flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="animate-fadeUp w-full min-w-0 max-w-md shrink-0 rounded-2xl border border-[#1E7D04]/40 bg-[#111111]/70 p-8 text-center shadow-[0_0_25px_rgba(0,255,0,0.1)] backdrop-blur-md md:w-[min(28rem,100%)] md:p-10">
         <h2 className="text-2xl md:text-3xl font-semibold mb-2">
           Welcome Back, <span className="text-[#1E7D04]">Vanguard</span>
         </h2>
@@ -156,12 +157,13 @@ export default function Login() {
           </button>
         </div>
 
-        <p className="text-gray-400 text-sm mt-8">
+        <p className="mt-8 text-sm text-gray-400">
           Don’t have an account?{" "}
           <Link to="/signup" className="text-[#1E7D04] hover:underline">
             Sign Up
           </Link>
         </p>
+        </div>
       </div>
     </section>
   );

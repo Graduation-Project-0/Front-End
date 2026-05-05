@@ -3,7 +3,10 @@ import HomeLogoLink from "./HomeLogoLink";
 
 const About = () => {
   return (
-    <div id="about" className="min-h-screen bg-black text-white font-sans selection:bg-green-500/30 p-6 md:p-12 flex flex-col items-center justify-center relative overflow-hidden">
+    <div
+      id="about"
+      className="relative flex min-h-screen w-full max-w-[100vw] flex-col items-center justify-center overflow-x-hidden bg-black p-6 font-sans text-white selection:bg-green-500/30 md:p-12"
+    >
       
       {/* Background Glows for atmosphere */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
@@ -16,7 +19,7 @@ const About = () => {
       </header>
 
       {/* Content Grid */}
-      <main className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-center relative z-10">
+      <main className="relative z-10 mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 items-center gap-8 lg:grid-cols-3">
         
         {/* LEFT COLUMN: Top Left & Bottom Left */}
         <div className="flex flex-col gap-12 order-2 lg:order-1">
@@ -45,7 +48,7 @@ const About = () => {
               <img
                 src="/Big Logo.svg"
                 alt="Vanguard Shield Logo"
-                className="relative w-72 md:w-[450px] drop-shadow-[0_0_35px_rgba(34,150,94,0.5)] transition-transform duration-700 group-hover:scale-105"
+                className="relative mx-auto h-auto w-full max-w-[min(18rem,88vw)] drop-shadow-[0_0_35px_rgba(34,150,94,0.5)] transition-transform duration-700 group-hover:scale-105 md:max-w-none md:w-[450px]"
               />
             </HomeLogoLink>
           </div>

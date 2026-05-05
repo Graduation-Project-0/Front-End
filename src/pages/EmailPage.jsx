@@ -68,21 +68,22 @@ export default function EmailPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black items-center relative overflow-hidden text-white px-4 pt-20">
-      <div className="absolute inset-0 bg-[url('/service.png')] bg-cover bg-center"></div>
-      <div className="relative z-10 max-w-2xl">
-        <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent italic mb-4">
+    <div className="relative flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden bg-black pt-20 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[url('/service.png')] bg-cover bg-center" />
+      <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full min-w-0 max-w-2xl shrink-0 pb-24 pt-8 md:w-[min(42rem,100%)] md:pt-12">
+        <h1 className="mb-4 text-center text-2xl font-semibold italic text-transparent md:text-3xl bg-gradient-to-r from-green-400 to-white bg-clip-text">
           No email goes unchecked
         </h1>
 
-        <p className="text-gray-400 mb-10 leading-relaxed text-center">
+        <p className="mb-10 text-center leading-relaxed text-gray-400">
           Vanguard scans every email in real time to detect phishing attempts,
           malicious attachments, and hidden risks before they reach your inbox
         </p>
 
         {/* Upload Box */}
         <div
-          className="border border-green-800/50 rounded-2xl p-10 mb-8 bg-black/40 hover:bg-black/50 transition-all cursor-pointer"
+          className="mb-8 cursor-pointer rounded-2xl border border-green-800/50 bg-black/40 p-6 transition-all hover:bg-black/50 sm:p-10"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -139,6 +140,7 @@ export default function EmailPage() {
             <p className="text-gray-300">URLs: {result.data?.num_urls}</p>
           </div>
         )}
+        </div>
       </div>
       {/* Instructions */}{" "}
       <div className="fixed bottom-6 right-4 z-10 flex flex-col items-end">

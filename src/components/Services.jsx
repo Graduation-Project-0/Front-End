@@ -26,9 +26,9 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="min-h-screen pt-20 text-white relative overflow-hidden to-black px-6 md:px-40"
+      className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-black px-4 pt-20 text-white sm:px-6 md:px-20 lg:px-40"
     >
-      <div className="text-center mb-12">
+      <div className="mx-auto mb-12 max-w-7xl text-center">
         <h2 className="landing-section-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]">
           Advanced Security Services
         </h2>
@@ -40,14 +40,17 @@ export default function Services() {
       {/* Responsive Grid */}
       <div
         className="
-          grid 
-          grid-cols-1 
+          mx-auto
+          grid
+          w-full
+          min-w-0
+          max-w-7xl
+          grid-cols-1
+          gap-7
+          px-0
           sm:grid-cols-2
+          sm:px-2
           lg:grid-cols-3
-          gap-7 
-          max-w-7xl 
-          mx-auto 
-          px-2
         "
       >
         {services.map((service, index) => (

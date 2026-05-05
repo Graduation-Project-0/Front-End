@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function Signup() {
@@ -12,6 +13,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [statusCode, setStatusCode] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -51,7 +53,11 @@ export default function Signup() {
 
       if (response.ok) {
         if (data.token) {
-          localStorage.setItem("token", data.token);
+          login({
+            token: data.token,
+            email: data?.user?.email || email,
+            name: data?.user?.name || name,
+          });
         }
         navigate("/verify-email-notice");
       } else {
@@ -66,8 +72,9 @@ export default function Signup() {
   };
 
   return (
-    <section className="min-h-screen flex justify-center items-center bg-black text-white px-4 pt-20 pb-10">
-      <div className="bg-[#111111]/70 backdrop-blur-md border border-[#1E7D04]/40 rounded-2xl shadow-[0_0_25px_rgba(0,255,0,0.1)] p-8 md:p-10 w-full max-w-md text-center">
+    <section className="flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-x-hidden bg-black pb-10 pt-20 text-white">
+      <div className="flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full min-w-0 max-w-md shrink-0 rounded-2xl border border-[#1E7D04]/40 bg-[#111111]/70 p-8 text-center shadow-[0_0_25px_rgba(0,255,0,0.1)] backdrop-blur-md md:w-[min(28rem,100%)] md:p-10">
         <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white">Create Account</h2>
         <p className="text-gray-400 text-sm mb-8">Fill your info below to create a new account.</p>
 
@@ -155,12 +162,13 @@ export default function Signup() {
           ))}
         </div>
 
-        <p className="text-gray-500 text-sm mt-10">
+        <p className="mt-10 text-sm text-gray-500">
           Already have an account?{" "}
-          <Link to="/login" className="text-[#1E7D04] font-bold hover:underline ml-1">
+          <Link to="/login" className="ml-1 font-bold text-[#1E7D04] hover:underline">
             Login
           </Link>
         </p>
+        </div>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import NavBrandLink from "./NavBrandLink";
 import {
   FaFacebookF,
@@ -36,7 +37,7 @@ export default function Footer() {
     <footer
       ref={ref}
       id="contact"
-      className={`bg-custom-gradient relative overflow-hidden text-white py-12 px-6 md:px-20 border-t border-[#1E7D04]/30 
+      className={`bg-custom-gradient relative w-full max-w-[100vw] overflow-x-hidden text-white py-12 px-4 sm:px-6 md:px-20 border-t border-[#1E7D04]/30 
       transform transition-all duration-[1200ms] ease-out
       ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
     >
@@ -90,6 +91,29 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3 text-[#1E7D04]">Legal</h3>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link
+                  to="/privacy"
+                  className="transition-colors duration-200 hover:text-white"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="transition-colors duration-200 hover:text-white"
+                >
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { toPng } from "html-to-image";
 import { useNavigate, Link, NavLink } from "react-router-dom";
 import api from "../api/axios";
 import { ENDPOINTS } from "../config/endpoints";
@@ -16,6 +17,7 @@ import {
   Cell,
 } from "recharts";
 import NavBrandLink from "../components/NavBrandLink";
+import LogoutConfirmDialog from "../components/LogoutConfirmDialog";
 import {
   LayoutDashboard,
   FileText,
@@ -77,6 +79,9 @@ export default function Dashboard() {
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
+  const [imageExporting, setImageExporting] = useState(false);
+  const dashboardSnapshotRef = useRef(null);
+  const snapshotBusyRef = useRef(false);
 
   const performLogout = async () => {
     if (logoutLoading) return;
@@ -84,6 +89,36 @@ export default function Dashboard() {
     await logout();
     navigate("/login", { replace: true });
   };
+
+  const handleDashboardImage = useCallback(async () => {
+    const el = dashboardSnapshotRef.current;
+    if (!el || snapshotBusyRef.current) return;
+    snapshotBusyRef.current = true;
+    setImageExporting(true);
+    try {
+      const dataUrl = await toPng(el, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: "#0a0a0a",
+        filter: (node) =>
+          !(
+            node instanceof HTMLElement &&
+            node.hasAttribute("data-html-to-image-ignore")
+          ),
+      });
+      const stamp = new Date().toISOString().slice(0, 10);
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `vanguard-dashboard-${stamp}.png`;
+      a.rel = "noopener";
+      a.click();
+    } catch (err) {
+      console.error("Dashboard image export failed:", err);
+    } finally {
+      snapshotBusyRef.current = false;
+      setImageExporting(false);
+    }
+  }, []);
 
   const getCleanRatePercent = (total, clean) => {
     const t = Number(total) || 0;
@@ -203,50 +238,18 @@ export default function Dashboard() {
 
   return (
     <>
-      {confirmLogoutOpen && (
-        <div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Confirm logout"
-          onClick={() => {
-            if (logoutLoading) return;
-            setConfirmLogoutOpen(false);
-          }}
-        >
-          <div
-            className="w-full max-w-sm rounded-2xl border border-[#1E7D04]/20 bg-[#0b0b0b] shadow-[0_0_0_1px_rgba(30,125,4,0.15),0_20px_60px_rgba(0,0,0,0.7)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-5">
-              <h3 className="text-lg font-black text-white">Logout</h3>
-              <p className="mt-2 text-sm text-gray-400">Are you sure you want to logout?</p>
-
-              <div className="mt-5 flex gap-3">
-                <button
-                  type="button"
-                  disabled={logoutLoading}
-                  onClick={() => setConfirmLogoutOpen(false)}
-                  className="flex-1 rounded-xl border border-gray-700 bg-transparent py-2.5 text-sm font-semibold text-gray-200 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await performLogout();
-                    setConfirmLogoutOpen(false);
-                  }}
-                  disabled={logoutLoading}
-                  className="flex-1 rounded-xl border border-red-500/30 bg-red-500/10 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {logoutLoading ? "Logging out..." : "Yes, Logout"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <LogoutConfirmDialog
+        open={confirmLogoutOpen}
+        loading={logoutLoading}
+        onRequestClose={() => {
+          if (logoutLoading) return;
+          setConfirmLogoutOpen(false);
+        }}
+        onConfirm={async () => {
+          await performLogout();
+          setConfirmLogoutOpen(false);
+        }}
+      />
 
       <div className="dashboard-page flex h-[100dvh] w-full max-w-[100vw] flex-col overflow-x-hidden bg-black font-sans text-white max-md:overflow-y-auto md:h-screen md:max-h-screen md:flex-row md:overflow-hidden">
         <aside className="hidden h-full w-64 shrink-0 flex-col border-r border-gray-900 bg-[#0d0d0d] p-6 md:flex">
@@ -260,7 +263,7 @@ export default function Dashboard() {
               <NavItem to="/file" icon={<FileText size={20} />} label="File" />
               <NavItem to="/url" icon={<LinkIcon size={20} />} label="URL" />
               <NavItem to="/email" icon={<Mail size={20} />} label="Email" />
-              <NavItem to="/plans" icon={<HelpCircle size={20} />} label="Help" />
+              <NavItem to="/terms" icon={<HelpCircle size={20} />} label="Help" />
             </ul>
           </nav>
 
@@ -303,7 +306,10 @@ export default function Dashboard() {
             </nav>
           </div>
 
-          <main className="box-border flex w-full min-w-0 flex-none flex-col gap-4 p-4 pb-8 md:min-h-0 md:flex-1 md:gap-6 md:overflow-hidden md:p-8">
+          <main
+            ref={dashboardSnapshotRef}
+            className="box-border flex w-full min-w-0 flex-none flex-col gap-4 p-4 pb-8 md:min-h-0 md:flex-1 md:gap-6 md:overflow-hidden md:p-8"
+          >
           {historyError && (
             <div
               role="alert"
@@ -330,9 +336,16 @@ export default function Dashboard() {
             />
             <button
               type="button"
-              className="flex items-center gap-2 rounded-xl border border-gray-800 bg-[#1a1a1a] px-3 py-2 text-xs text-gray-300 hover:bg-[#222] sm:px-5 sm:text-sm"
+              data-html-to-image-ignore
+              onClick={handleDashboardImage}
+              disabled={imageExporting}
+              className="flex items-center gap-2 rounded-xl border border-[#1E7D04]/50 bg-[#009e28] px-3 py-2 text-xs font-semibold text-white shadow-[0_0_16px_rgba(30,125,4,0.25)] transition hover:bg-[#0ba650] hover:shadow-[0_0_20px_rgba(30,125,4,0.35)] disabled:cursor-not-allowed disabled:opacity-60 sm:px-5 sm:text-sm"
             >
-              <Download size={16} /> <span className="max-sm:hidden">Reports</span><span className="sm:hidden">PDF</span>
+              <Download size={16} />{" "}
+              <span className="max-sm:hidden">
+                {imageExporting ? "Exporting…" : "Reports"}
+              </span>
+              <span className="sm:hidden">{imageExporting ? "…" : "PNG"}</span>
             </button>
             <div className="flex items-center gap-3 border-l border-gray-800 pl-3 md:gap-4 md:pl-6">
               <div className="min-w-0 text-right">
@@ -374,8 +387,8 @@ export default function Dashboard() {
               <h3 className="mb-2 text-[10px] font-bold uppercase tracking-wide text-gray-500">
                 Overall Security
               </h3>
-              <div className="relative h-24 w-24">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="relative h-24 w-24 min-h-[6rem] min-w-[6rem]">
+                <ResponsiveContainer width="100%" height="100%" minHeight={96} minWidth={96}>
                   <PieChart>
                     <Pie
                       data={[
@@ -403,13 +416,13 @@ export default function Dashboard() {
             </div>
           </section>
 
-          <section className="grid grid-cols-1 gap-4 max-md:flex-none lg:min-h-0 lg:flex-1 lg:auto-rows-fr lg:grid-cols-3 lg:grid-rows-1 lg:items-stretch">
-            <div className="flex min-h-[280px] flex-col rounded-2xl border border-gray-900 bg-[#0d0d0d] p-4 sm:p-6 lg:col-span-2 lg:h-full lg:min-h-0">
+          <section className="grid min-h-0 grid-cols-1 gap-4 md:min-h-0 md:flex-1 lg:auto-rows-fr lg:grid-cols-3 lg:grid-rows-1 lg:items-stretch">
+            <div className="flex min-h-[280px] flex-col rounded-2xl border border-gray-900 bg-[#0d0d0d] p-4 sm:min-h-[300px] sm:p-6 lg:col-span-2 lg:h-full lg:min-h-0">
               <h3 className="mb-1 shrink-0 font-bold tracking-wide text-gray-200">Scans by month</h3>
               <p className="mb-3 shrink-0 text-xs text-gray-500">Total scans per month in {chartYear}</p>
-              <div className="min-h-[220px] w-full min-w-0 flex-1 sm:min-h-[260px]">
-                <ResponsiveContainer width="100%" height="100%" minHeight={220}>
-                  <AreaChart data={chartData} margin={{ top: 8, right: 4, left: 0, bottom: 4 }}>
+              <div className="relative h-[min(22rem,42vh)] w-full min-h-[220px] shrink-0 sm:h-[min(24rem,38vh)] lg:h-[min(26rem,40vh)] lg:min-h-[240px]">
+                <ResponsiveContainer width="100%" height="100%" minHeight={200}>
+                  <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
                     <defs>
                       <linearGradient id="dashboardScansFill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#b8f5c4" stopOpacity={0.65} />

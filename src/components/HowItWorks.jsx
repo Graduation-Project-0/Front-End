@@ -28,16 +28,19 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section id="work" className="h-full bg-black text-white pt-8 md:p-20 flex items-center">
-      <div className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <section
+      id="work"
+      className="flex w-full max-w-[100vw] items-center justify-center overflow-x-hidden bg-black px-4 pb-12 pt-8 text-white sm:px-6 md:p-20"
+    >
+      <div className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 items-start gap-10 lg:grid-cols-2">
         
         {/* Left Side: Header & Image */}
         <div className="space-y-12">
           <div className="space-y-6">
-            <h1 className="landing-section-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] py-2">
+            <h1 className="landing-section-title py-2 text-center text-4xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] md:text-left md:text-5xl">
               How It Works
             </h1>
-            <p className="text-gray-400 text-lg leading-relaxed max-w-md">
+            <p className="mx-auto max-w-md text-lg leading-relaxed text-gray-400 md:mx-0">
               Security is a process, not a product. Learn everything you need to 
               know about taking the right steps to reach your destination.
             </p>
@@ -48,7 +51,7 @@ const HowItWorks = () => {
             <img 
               src="/laptop.png" 
               alt="Vanguard Dashboard on Laptop" 
-            className="relative z-10 w-full lg:w-[60%] max-w-none transform scale-110 lg:scale-120 transition-transform duration-700 ease-out drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)]"
+            className="relative z-10 mx-auto h-auto w-full max-w-full transform transition-transform duration-700 ease-out drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] scale-100 sm:scale-105 md:scale-110 lg:w-[60%] lg:scale-100 xl:scale-105"
             />
           </div>
         </div>

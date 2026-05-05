@@ -117,54 +117,66 @@ const VerifyCode = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-white relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full bg-green-500/10 blur-[200px] opacity-40"></div>
+    <section className="relative flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-x-hidden overflow-y-auto bg-gradient-to-b from-black via-[#0b160b] to-[#032004] py-10 text-white">
+      <div className="pointer-events-none absolute left-0 top-0 h-[400px] w-[400px] rounded-full bg-green-500/10 opacity-40 blur-[200px]" />
 
-      <div className="relative z-10 bg-[#111111]/90 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-[0_0_30px_rgba(30,125,4,0.3)] w-[90%] max-w-md text-center border border-green-800/50">
-        <h2 className="text-3xl font-extrabold mb-2 text-white">Verify your code</h2>
+      <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full min-w-0 max-w-md shrink-0 rounded-2xl border border-[#1E7D04]/40 bg-[#111111]/70 p-8 text-center shadow-[0_0_25px_rgba(0,255,0,0.1)] backdrop-blur-md md:w-[min(28rem,100%)] md:p-10">
+          <h2 className="mb-2 text-2xl font-semibold text-white md:text-3xl">
+            Verify your code
+          </h2>
 
-        <p className="text-gray-400 text-sm mb-8">
-          Enter the passcode sent to your email:
-          <br />
-          <span className="text-green-400 font-medium">{email}</span>
-        </p>
+          <p className="mb-8 text-sm text-gray-400">
+            Enter the passcode sent to your email:
+            <br />
+            <span className="break-words font-medium text-[#1E7D04]">{email}</span>
+          </p>
 
-        {/* Input Group */}
-        <div className="flex justify-center gap-2 md:gap-3 mb-6" onPaste={handlePaste}>
-          {code.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => (inputsRef.current[index] = el)}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleChange(e.target.value, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              className="w-10 h-10 md:w-12 md:h-12 text-center text-xl font-semibold rounded-xl bg-black/40 border border-green-800/30 text-white focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all duration-200"
-              inputMode="numeric"
-            />
-          ))}
-        </div>
+          <div
+            className="mb-8 flex justify-center gap-2 md:gap-3"
+            onPaste={handlePaste}
+          >
+            {code.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => (inputsRef.current[index] = el)}
+                type="text"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleChange(e.target.value, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                className="h-11 w-11 rounded-md border border-gray-700 bg-transparent text-center text-lg font-semibold text-gray-200 transition focus:border-[#1E7D04] focus:outline-none md:h-12 md:w-12 md:text-xl"
+                inputMode="numeric"
+              />
+            ))}
+          </div>
 
-        {error && <p className="text-red-500 text-sm mb-6">{error}</p>}
+          {error && (
+            <p className="mb-4 text-left text-sm text-red-500">{error}</p>
+          )}
 
-        <button
-          onClick={handleVerify}
-          disabled={loading}
-          className={`w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]
-            ${loading ? "opacity-60 cursor-not-allowed flex items-center justify-center" : "hover:from-[#249605] hover:to-[#0B4001]"}`}
-        >
-          {loading ? "Verifying..." : "Verify"}
-        </button>
-
-        <div className="mt-4 text-sm text-gray-400">
-          Didn't receive the code?
-          <button className="text-green-500 hover:text-green-400 font-medium ml-1 transition-colors duration-200">
-            Resend
+          <button
+            type="button"
+            onClick={handleVerify}
+            disabled={loading}
+            className={`block w-full cursor-pointer rounded-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(30,125,4,0.3)] transition-all duration-300
+            ${loading ? "cursor-not-allowed opacity-50" : "hover:opacity-80"}`}
+          >
+            {loading ? "Verifying..." : "Verify"}
           </button>
+
+          <p className="mt-8 text-sm text-gray-400">
+            Didn&apos;t receive the code?{" "}
+            <button
+              type="button"
+              className="font-medium text-[#1E7D04] transition-colors hover:underline"
+            >
+              Resend
+            </button>
+          </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

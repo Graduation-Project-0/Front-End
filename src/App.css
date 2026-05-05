@@ -8,15 +8,29 @@
   font-style: normal;
   font-display: swap;
 }
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   max-width: 100%;
 }
+
+/* Recharts measures layout with percentage width; global max-width:100% on * breaks it */
+.dashboard-page .recharts-responsive-container,
+.dashboard-page .recharts-wrapper {
+  max-width: none !important;
+}
+html,
+body {
+  overflow-x: hidden;
+}
+
 html,
 body,
 #root {
   height: 100%;
   width: 100%;
+  max-width: 100vw;
   margin: 0;
   padding: 0;
   background-color: black;
@@ -142,8 +156,7 @@ body,
   gap: 0.12rem;
   text-decoration: none;
   color: #fff;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  font-weight: 500;
   line-height: 1;
 }
 
@@ -169,8 +182,8 @@ body,
 .nav-logo-text {
   font-family: "Gargoyles", system-ui, sans-serif;
   font-size: clamp(1.05rem, 2.5vw, 1.45rem);
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight:bold;
+  font-synthesis: weight;
   color: rgba(255, 255, 255, 0.92);
   transition: color 0.2s ease;
 }
@@ -187,5 +200,4 @@ body,
 
 .nav-logo--compact .nav-logo-text {
   font-size: 0.95rem;
-  letter-spacing: 0.1em;
 }

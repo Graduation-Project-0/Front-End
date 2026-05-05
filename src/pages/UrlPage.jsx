@@ -71,39 +71,40 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen text-white relative overflow-x-hidden">
+    <div className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[url('/service.png')] bg-cover bg-center" />
 
-      <div className="absolute inset-0 bg-[url('/service.png')] bg-cover bg-center"></div>
+      <div className="relative z-10 flex min-h-screen w-full justify-center px-4 py-20 sm:px-6 md:px-8">
+        <div className="flex min-h-0 w-full min-w-0 max-w-2xl shrink-0 flex-col items-center justify-center md:w-[min(42rem,100%)]">
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20">
-
-        <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent italic mb-4">
+        <h1 className="mb-4 px-2 text-center text-2xl font-semibold italic text-transparent md:text-3xl bg-gradient-to-r from-green-400 to-white bg-clip-text">
           Behind every link lies a story,
         </h1>
 
-        <p className="text-gray-400 mt-3 max-w-2xl text-center">
+        <p className="mt-3 w-full min-w-0 px-1 text-center text-gray-400">
           Vanguard analyzes URLs in real time to detect malicious patterns, phishing attempts, and hidden risks
         </p>
 
-        <div className="relative flex items-center w-full h-15 max-w-2xl border border-green-700 rounded-xl bg-black/50 shadow-[0_0_20px_rgba(0,255,0,0.1)] mt-12 overflow-hidden">
+        <div className="relative mt-12 flex w-full min-w-0 flex-col gap-2 overflow-hidden rounded-xl border border-green-700 bg-black/50 shadow-[0_0_20px_rgba(0,255,0,0.1)] sm:h-14 sm:flex-row sm:items-stretch sm:gap-0">
           <input
             type="text"
             placeholder="Scan any URL"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="flex-1 bg-transparent px-4 py-3 text-gray-300 focus:outline-none placeholder-gray-500"
+            className="min-w-0 flex-1 bg-transparent px-4 py-3 text-gray-300 placeholder-gray-500 focus:outline-none sm:py-0"
           />
 
           <button
             onClick={handleScan}
             disabled={loading}
-            className="cursor-pointer bg-green-700 hover:bg-green-900 text-white font-semibold px-6 py-2 h-full transition-all duration-300 disabled:opacity-50"
+            className="shrink-0 cursor-pointer bg-green-700 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-green-900 disabled:opacity-50 sm:h-auto sm:px-6 sm:py-0"
           >
             {loading ? "Scanning..." : "Scan"}
           </button>
         </div>
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {error && <p className="mt-4 text-red-500">{error}</p>}
+        </div>
       </div>
 
       <div className="fixed bottom-6 right-4 z-10 flex flex-col items-end">

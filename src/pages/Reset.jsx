@@ -20,7 +20,7 @@ export default function Reset() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept":"application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({ email }),
       });
@@ -47,48 +47,56 @@ export default function Reset() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-white relative overflow-hidden animate-fadeUp">
-      <div className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[200px] opacity-40"></div>
+    <section className="relative flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-x-hidden overflow-y-auto bg-gradient-to-b from-black via-[#0b160b] to-[#032004] py-10 text-white">
+      <div className="pointer-events-none absolute left-0 top-0 h-[400px] w-[400px] rounded-full bg-green-500/10 opacity-40 blur-[200px]" />
 
-      <div className="relative z-10 bg-[#111111]/70 backdrop-blur-md p-10 rounded-3xl shadow-[0_0_30px_rgba(0,255,0,0.1)] w-[90%] max-w-md text-center border border-green-800/30">
-        <h2 className="text-2xl font-bold mb-2">Reset Password</h2>
-        <p className="text-gray-400 text-sm mb-8">
-          Enter your email to receive a reset link.
-        </p>
+      <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 md:px-8">
+        <div className="animate-fadeUp w-full min-w-0 max-w-md shrink-0 rounded-2xl border border-[#1E7D04]/40 bg-[#111111]/70 p-8 text-center shadow-[0_0_25px_rgba(0,255,0,0.1)] backdrop-blur-md md:w-[min(28rem,100%)] md:p-10">
+          <h2 className="mb-2 text-2xl font-semibold md:text-3xl">
+            Reset Password
+          </h2>
+          <p className="mb-8 text-sm text-gray-400">
+            Enter your email to receive a reset link.
+          </p>
 
-        <form onSubmit={handleReset}>
-          <div className="text-left mb-5">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-transparent border-b border-gray-700 focus:border-[#1E7D04] outline-none text-gray-200 placeholder-gray-500 focus:placeholder-transparent"
-            />
-          </div>
+          <form onSubmit={handleReset}>
+            <div className="mb-8 text-left">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-md border-b border-gray-700 bg-transparent px-4 py-2 text-gray-200 outline-none placeholder-gray-500 focus:border-[#1E7D04] focus:placeholder-transparent"
+              />
+            </div>
 
-          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-          {success && <p className="text-green-400 text-sm mb-3">{success}</p>}
+            {error && (
+              <p className="mb-3 text-left text-sm text-red-500">{error}</p>
+            )}
+            {success && (
+              <p className="mb-3 text-left text-sm text-green-400">{success}</p>
+            )}
 
-          <button
-            type="submit"
-            className={`block w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]
-            ${loading ? "opacity-50 cursor-not-allowed" : "hover:opacity-80"}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`block w-full cursor-pointer rounded-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 text-sm font-semibold text-white shadow-[0_0_20px_rgba(30,125,4,0.3)] transition-all duration-300
+            ${loading ? "cursor-not-allowed opacity-50" : "hover:opacity-80"}
           `}
-            disabled={loading}
-          >
-            {loading ? "Sending..." : "Send"}
-          </button>
-        </form>
+            >
+              {loading ? "Sending..." : "Send"}
+            </button>
+          </form>
 
-        <p className="text-gray-400 text-sm mt-8">
-          Back to{" "}
-          <Link to="/login" className="text-[#1E7D04] hover:underline">
-            Login
-          </Link>
-        </p>
+          <p className="mt-8 text-sm text-gray-400">
+            Back to{" "}
+            <Link to="/login" className="text-[#1E7D04] hover:underline">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

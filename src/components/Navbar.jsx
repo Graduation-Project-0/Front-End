@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Menu, X, Camera, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import NavBrandLink from "./NavBrandLink";
+import LogoutConfirmDialog from "./LogoutConfirmDialog";
 import { useProfileAvatar } from "../hooks/useProfileAvatar";
 import { useAuth } from "../hooks/useAuth";
 
@@ -39,12 +40,6 @@ export default function Navbar() {
     setLogoutLoading(false);
   };
 
-  const goDashboard = () => {
-    setProfileMenuOpen(false);
-    setConfirmLogoutOpen(false);
-    navigate("/dashboard");
-  };
-
   useEffect(() => {
     const onDocMouseDown = (e) => {
       if (!profileRef.current) return;
@@ -57,67 +52,21 @@ export default function Navbar() {
 
   return (
     <>
-      {confirmLogoutOpen && (
-        <div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Confirm logout"
-          onClick={() => {
-            if (logoutLoading) return;
-            setConfirmLogoutOpen(false);
-          }}
-        >
-          <div
-            className="w-full max-w-sm rounded-2xl border border-[#1E7D04]/20 bg-[#0b0b0b] shadow-[0_0_0_1px_rgba(30,125,4,0.15),0_20px_60px_rgba(0,0,0,0.7)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-5">
-              <h3 className="text-white font-black text-lg">Logout</h3>
-              <p className="mt-2 text-gray-400 text-sm">
-                Are you sure you want to logout?
-              </p>
-
-              <div className="mt-5 flex gap-3">
-                <button
-                  type="button"
-                  disabled={logoutLoading}
-                  onClick={() => setConfirmLogoutOpen(false)}
-                  className="flex-1 rounded-xl border border-gray-700 bg-transparent py-2.5 text-sm font-semibold text-gray-200 hover:bg-white/5 transition disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await performLogout();
-                    setConfirmLogoutOpen(false);
-                  }}
-                  disabled={logoutLoading}
-                  className="flex-1 rounded-xl border border-red-500/30 bg-red-500/10 py-2.5 text-sm font-semibold text-red-300 hover:bg-red-500/15 transition disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {logoutLoading ? "Logging out..." : "Yes, Logout"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <LogoutConfirmDialog
+        open={confirmLogoutOpen}
+        loading={logoutLoading}
+        onRequestClose={() => {
+          if (logoutLoading) return;
+          setConfirmLogoutOpen(false);
+        }}
+        onConfirm={async () => {
+          await performLogout();
+          setConfirmLogoutOpen(false);
+        }}
+      />
 
       <nav
-        className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] 
-             w-[95%] sm:w-[90%] md:w-[85%] lg:w-[95%] 
-             bg-black/80 backdrop-blur-md flex justify-between items-center
-             px-6 sm:px-8 md:px-10 lg:px-16 py-2
-             mt-0 
-             rounded-2xl
-             border-b border-[#1E7D04]/60
-             after:content-['']
-             after:absolute
-             after:left-0 after:right-0 after:bottom-0
-             after:h-[4px]
-             after:shadow-[0_3px_6px_rgba(30,125,4,0.4)]
-             after:pointer-events-none"
+        className="fixed top-0 left-1/2 z-[100] flex w-[min(100%,calc(100vw-1rem))] max-w-[min(100%,80rem)] -translate-x-1/2 items-center justify-between overflow-visible rounded-2xl border-b border-[#1E7D04]/60 bg-black/80 px-4 py-2 backdrop-blur-md after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:shadow-[0_3px_6px_rgba(30,125,4,0.4)] after:content-[''] sm:px-6 md:px-10 lg:px-14"
       >
       <input
         ref={fileInputRef}
@@ -158,7 +107,7 @@ export default function Navbar() {
       </ul>
 
       {/* Desktop Buttons */}
-      <div className="hidden md:flex items-center space-x-4 relative">
+      <div className="relative hidden items-center space-x-4 overflow-visible md:flex">
         {!isAuthenticated ? (
           <>
             <Link
@@ -177,24 +126,34 @@ export default function Navbar() {
         ) : (
           <div
             ref={profileRef}
-            className="relative flex items-center gap-3"
+            className="relative flex items-center gap-2"
           >
-            <div className="relative cursor-pointer">
+            <div className="relative">
               {displaySrc ? (
-                <img
-                  src={displaySrc}
+                <button
+                  type="button"
                   onClick={() => setProfileMenuOpen((v) => !v)}
-                  className="w-11 h-11 rounded-full border-2 border-green-500/50 object-cover"
-                  alt="Profile"
-                />
+                  className="block rounded-full ring-2 ring-green-500/40 ring-offset-2 ring-offset-black/80 focus:outline-none focus-visible:ring-[#1E7D04]"
+                  aria-expanded={profileMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label="Account menu"
+                >
+                  <img
+                    src={displaySrc}
+                    className="h-10 w-10 rounded-full object-cover"
+                    alt=""
+                  />
+                </button>
               ) : (
                 <button
                   type="button"
                   onClick={() => setProfileMenuOpen((v) => !v)}
-                  className="w-11 h-11 rounded-full border-2 border-green-500/30 bg-white/5 hover:bg-white/10 transition flex items-center justify-center"
-                  aria-label="Open profile menu"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7D04]"
+                  aria-expanded={profileMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label="Open account menu"
                 >
-                  <User size={18} className="text-gray-200" />
+                  <User size={20} className="text-gray-200" />
                 </button>
               )}
 
@@ -206,77 +165,87 @@ export default function Navbar() {
                     setProfileMenuOpen(false);
                     openPicker();
                   }}
-                  className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full border border-black bg-[#1E7D04] text-white shadow hover:bg-[#158003]"
+                  className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-black bg-[#1E7D04] text-white shadow-sm hover:bg-[#158003]"
                   aria-label={hasCustomAvatar ? "Change profile photo" : "Add profile photo"}
                 >
-                  <Camera size={12} strokeWidth={2.5} />
+                  <Camera size={10} strokeWidth={2.5} />
                 </button>
               )}
             </div>
 
-            {/* Click dropdown */}
             <div
-              className={`absolute right-0 top-full mt-3 w-56 origin-top-right rounded-2xl border border-[#1E7D04]/20
-                bg-black/70 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] overflow-hidden transition-all duration-150
-                ${profileMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"}`}
+              className={`absolute right-0 top-full z-[200] mt-2 w-72 min-w-[18rem] origin-top-right overflow-hidden rounded-xl border border-[#1E7D04]/25 bg-[#0c0c0c] py-2 shadow-lg shadow-black/50 backdrop-blur-xl transition-all duration-150 sm:w-80 sm:min-w-[20rem] ${
+                profileMenuOpen
+                  ? "pointer-events-auto translate-y-0 opacity-100"
+                  : "pointer-events-none -translate-y-1 opacity-0"
+              }`}
               role="menu"
-              aria-label="Profile menu"
+              aria-label="Account menu"
             >
-              <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 border-b border-white/5">
-                My Account
+              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Account
+              </p>
+              <div className="flex flex-col gap-0.5 px-1.5">
+                <MenuLink to="/dashboard" label="Dashboard" onPick={() => setProfileMenuOpen(false)} />
+                <MenuLink to="/plans" label="Plans" onPick={() => setProfileMenuOpen(false)} />
+                <MenuLink to="/privacy" label="Privacy" onPick={() => setProfileMenuOpen(false)} />
+                <MenuLink to="/terms" label="Terms" onPick={() => setProfileMenuOpen(false)} />
               </div>
 
-              <MenuLink to="/dashboard" label="My Dashboard" onPick={() => setProfileMenuOpen(false)} />
-              <MenuLink to="/plans" label="Plans" onPick={() => setProfileMenuOpen(false)} />
-              <MenuLink to="/privacy" label="Privacy" onPick={() => setProfileMenuOpen(false)} />
-              <MenuLink to="/terms" label="Terms" onPick={() => setProfileMenuOpen(false)} />
+              <div className="mx-2 my-2 border-t border-white/10" />
 
-              <div className="border-t border-white/5" />
-
-              <button
-                type="button"
-                onClick={() => {
-                  setProfileMenuOpen(false);
-                  openPicker();
-                }}
-                disabled={avatarDisabled}
-                className="w-full text-left px-4 py-3 text-sm font-semibold text-gray-200 hover:bg-white/5 transition disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {hasCustomAvatar ? "Change photo" : "Add photo"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  clearAvatar();
-                  disableAvatar();
-                  setProfileMenuOpen(false);
-                }}
-                className="w-full text-left px-4 py-3 text-sm font-semibold text-gray-200 hover:bg-white/5 transition"
-              >
-                Don't use a photo
-              </button>
-              {avatarDisabled && (
+              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Photo
+              </p>
+              <div className="flex flex-col gap-0.5 px-1.5">
                 <button
                   type="button"
                   onClick={() => {
-                    enableAvatar();
+                    setProfileMenuOpen(false);
+                    openPicker();
+                  }}
+                  disabled={avatarDisabled}
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {hasCustomAvatar ? "Change photo" : "Add photo"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearAvatar();
+                    disableAvatar();
                     setProfileMenuOpen(false);
                   }}
-                  className="w-full text-left px-4 py-3 text-sm font-semibold text-gray-200 hover:bg-white/5 transition"
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10"
                 >
-                  Enable photo upload
+                  Remove photo
                 </button>
-              )}
+                {avatarDisabled && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      enableAvatar();
+                      setProfileMenuOpen(false);
+                    }}
+                    className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10"
+                  >
+                    Enable photo
+                  </button>
+                )}
+              </div>
 
-              <div className="border-t border-white/5" />
-              <button
-                type="button"
-                onClick={() => setConfirmLogoutOpen(true)}
-                className="w-full text-left px-4 py-3 text-sm font-semibold text-red-300 hover:bg-red-500/10 transition disabled:opacity-60 disabled:cursor-not-allowed"
-                disabled={logoutLoading}
-              >
-                Logout
-              </button>
+              <div className="mx-2 my-2 border-t border-white/10" />
+
+              <div className="px-1.5 pb-0.5">
+                <button
+                  type="button"
+                  onClick={() => setConfirmLogoutOpen(true)}
+                  disabled={logoutLoading}
+                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-red-400 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Log out
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -293,110 +262,130 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div
-          className="absolute top-[100%] left-0 w-full bg-black/90 backdrop-blur-md border-t border-gray-700 
-          flex flex-col items-center space-y-5 py-6 text-gray-300 font-medium text-base animate-fadeIn"
+          className="animate-fadeIn absolute inset-x-0 top-full z-[110] max-h-[min(calc(100dvh-4rem),26rem)] overflow-y-auto overscroll-contain border-t border-gray-700 bg-black/95 px-3 py-3 backdrop-blur-md sm:px-4"
         >
+          <div className="mx-auto flex w-full max-w-sm flex-col items-stretch space-y-1.5 text-center text-sm font-medium text-gray-300">
           <Link
             to="/#home"
             onClick={() => setIsOpen(false)}
-            className="hover:text-[#1E7D04] transition"
+            className="rounded-md py-1.5 transition hover:bg-white/5 hover:text-[#1E7D04]"
           >
             Home
           </Link>
           <Link
             to="/#about"
             onClick={() => setIsOpen(false)}
-            className="hover:text-[#1E7D04] transition"
+            className="rounded-md py-1.5 transition hover:bg-white/5 hover:text-[#1E7D04]"
           >
             About
           </Link>
           <Link
             to="/#services"
             onClick={() => setIsOpen(false)}
-            className="hover:text-[#1E7D04] transition"
+            className="rounded-md py-1.5 transition hover:bg-white/5 hover:text-[#1E7D04]"
           >
             Services
           </Link>
           <Link
             to="/#contact"
             onClick={() => setIsOpen(false)}
-            className="hover:text-[#1E7D04] transition"
+            className="rounded-md py-1.5 transition hover:bg-white/5 hover:text-[#1E7D04]"
           >
             Contact
           </Link>
 
           {/* Mobile Buttons */}
-          <div className="flex flex-col space-y-3 mt-4 relative">
+          <div className="relative mt-1 flex flex-col space-y-2">
             {!isAuthenticated ? (
               <>
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="border border-[#1E7D04] text-[#1E7D04] text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-300 hover:bg-[#025714] hover:text-white"
+                  className="rounded-full border border-[#1E7D04] px-4 py-1.5 text-xs font-semibold text-[#1E7D04] transition-all duration-300 hover:bg-[#025714] hover:text-white"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/signup"
                   onClick={() => setIsOpen(false)}
-                  className="bg-gradient-to-r from-[#1E7D04] to-[#0A3301] text-white font-semibold px-5 py-1.5 rounded-full transition-all duration-300 hover:opacity-70"
+                  className="rounded-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] px-4 py-1.5 text-xs font-semibold text-white transition-all duration-300 hover:opacity-70"
                 >
                   Sign Up
                 </Link>
               </>
             ) : (
-              <div className="relative flex flex-col items-center mx-auto gap-3">
-                <div
-                  className="relative"
-                >
-                  <img
-                    src={displaySrc}
-                    onClick={() => {
-                      navigate("/dashboard");
-                      setIsOpen(false);
-                    }}
-                    className="w-20 h-20 rounded-full object-cover cursor-pointer border-2 border-green-500/50 hover:opacity-90 transition-opacity"
-                    alt="Profile"
-                  />
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openPicker();
-                    }}
-                    className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-[#1E7D04] text-white"
-                    aria-label="Change profile photo"
-                  >
-                    <Camera size={14} />
-                  </button>
+              <div className="relative mx-auto flex w-full max-w-sm flex-col items-center gap-3 pt-1">
+                <div className="relative">
+                  {displaySrc ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate("/dashboard");
+                        setIsOpen(false);
+                      }}
+                      className="block rounded-full ring-2 ring-green-500/40"
+                      aria-label="Go to dashboard"
+                    >
+                      <img
+                        src={displaySrc}
+                        className="h-12 w-12 rounded-full object-cover"
+                        alt=""
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate("/dashboard");
+                        setIsOpen(false);
+                      }}
+                      className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10"
+                      aria-label="Go to dashboard"
+                    >
+                      <User size={22} className="text-gray-200" />
+                    </button>
+                  )}
+                  {!avatarDisabled && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openPicker();
+                      }}
+                      className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full border border-black bg-[#1E7D04] text-white shadow-sm"
+                      aria-label="Change profile photo"
+                    >
+                      <Camera size={10} strokeWidth={2.5} />
+                    </button>
+                  )}
                 </div>
 
-                <div className="w-full grid gap-2 mt-2">
+                <div className="grid w-full max-w-xs gap-2">
                   <Link
                     to="/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-center border border-white/10 bg-white/5 text-gray-200 text-sm font-semibold px-5 py-2 rounded-xl hover:bg-white/10 transition"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-center text-sm font-medium text-gray-200 transition hover:bg-white/10"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to="/plans"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-center border border-white/10 bg-white/5 text-gray-200 text-sm font-semibold px-5 py-2 rounded-xl hover:bg-white/10 transition"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-center text-sm font-medium text-gray-200 transition hover:bg-white/10"
                   >
                     Plans
                   </Link>
                   <Link
                     to="/privacy"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-center border border-white/10 bg-white/5 text-gray-200 text-sm font-semibold px-5 py-2 rounded-xl hover:bg-white/10 transition"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-center text-sm font-medium text-gray-200 transition hover:bg-white/10"
                   >
                     Privacy
                   </Link>
                   <Link
                     to="/terms"
                     onClick={() => setIsOpen(false)}
-                    className="w-full text-center border border-white/10 bg-white/5 text-gray-200 text-sm font-semibold px-5 py-2 rounded-xl hover:bg-white/10 transition"
+                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-center text-sm font-medium text-gray-200 transition hover:bg-white/10"
                   >
                     Terms
                   </Link>
@@ -404,15 +393,16 @@ export default function Navbar() {
                     type="button"
                     onClick={() => setConfirmLogoutOpen(true)}
                     disabled={logoutLoading}
-                    className="w-full border border-red-500/30 bg-red-500/10 text-red-300 text-sm font-semibold px-5 py-2 rounded-xl hover:bg-red-500/15 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2.5 text-sm font-semibold text-red-300 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    Logout
+                    Log out
                   </button>
                 </div>
               </div>
             )}
           </div>
         </div>
+      </div>
       )}
     </nav>
     </>
@@ -424,7 +414,7 @@ function MenuLink({ to, label, onPick }) {
     <Link
       to={to}
       onClick={onPick}
-      className="block px-4 py-3 text-sm font-semibold text-gray-200 hover:bg-white/5 transition"
+      className="block rounded-lg px-3 py-2 text-sm font-medium text-gray-200 transition hover:bg-white/10"
       role="menuitem"
     >
       {label}
