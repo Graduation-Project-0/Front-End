@@ -41,8 +41,9 @@ export default function UrlStandard() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
-      <div className="max-w-4xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+    <div className="min-h-screen w-full max-w-[100vw] bg-black text-white px-4 sm:px-6 md:px-8 py-10">
+      <div className="w-full md:w-3/4 mx-auto max-w-5xl bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+        
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
           <h2 className="text-green-500 font-semibold text-xl">
             Malware Analysis Report
@@ -66,11 +67,12 @@ export default function UrlStandard() {
             Standard
           </span>
           <Link
-            to="/urladvanced"
-            className="text-gray-500 hover:text-gray-300 cursor-pointer"
-          >
-            Advanced
-          </Link>
+  to="/urladvanced"
+  state={{ url: data?.url }}
+  className="text-gray-500 hover:text-gray-300 cursor-pointer"
+>
+  Advanced
+</Link>
         </div>
 
         <div className="bg-[#111] rounded-xl p-6 sm:p-10 shadow-inner text-center">

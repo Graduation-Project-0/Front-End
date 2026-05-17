@@ -45,6 +45,9 @@ function AppInner() {
     "/verify",
     "/reset",
     "/confirm",
+    
+
+
   ];
   const path =
     location.pathname.length > 1 && location.pathname.endsWith("/")
@@ -56,8 +59,8 @@ function AppInner() {
     <div
       className={
         isNoWrapper
-          ? "min-h-screen w-full min-w-0"
-          : "min-h-full w-full min-w-0 max-w-[100vw] overflow-x-hidden pt-20"
+          ? "min-h-screen "
+          :"container mx-auto pt-20 overflow-hidden "
       }
     >
       <ScrollToSection />

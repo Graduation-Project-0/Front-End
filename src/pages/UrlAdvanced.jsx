@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link  , useLocation} from "react-router-dom";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
 import { Download, ChevronDown, ChevronUp } from "lucide-react";
 
 export default function UrlAdvanced() {
@@ -7,17 +8,44 @@ export default function UrlAdvanced() {
   const [scanResultAdvanced, setScanResultAdvanced] = useState(null);
   // الحالة الخاصة بإظهار كل المتغيرات أو لا
   const [showAllJS, setShowAllJS] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const storedData = sessionStorage.getItem("scanResultAdvanced");
-    if (storedData) {
+    const fetchAdvanced = async () => {
+      // use URL passed via router state, or fall back to what was stored
+      const targetUrl =
+        location.state?.url || sessionStorage.getItem("pendingAdvancedUrl");
+      if (!targetUrl) return;
+  
+      setLoading(true);
       try {
-        setScanResultAdvanced(JSON.parse(storedData));
+        const token = localStorage.getItem("token");
+        const res = await fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_URL), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ url: targetUrl }),
+        });
+        const json = await res.json();
+        sessionStorage.setItem("scanResultAdvanced", JSON.stringify(json));
+        setScanResultAdvanced(json);
       } catch (err) {
-        console.error("Error parsing scan data:", err);
+        console.error("Advanced scan failed:", err);
+      } finally {
+        setLoading(false);
       }
+    };
+  
+    // Only fetch if we don't already have a fresh result
+    const cached = sessionStorage.getItem("scanResultAdvanced");
+    if (!cached) {
+      fetchAdvanced();
+    } else {
+      setScanResultAdvanced(JSON.parse(cached));
+      setLoading(false);
     }
-    setTimeout(() => setLoading(false), 500);
   }, []);
 
   const data = scanResultAdvanced?.data || {};
@@ -35,8 +63,9 @@ export default function UrlAdvanced() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
-      <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)] w-full">
+    <div className="min-h-screen w-full max-w-[100vw] bg-black text-white px-4 sm:px-6 md:px-8 py-10">
+    <div className="w-full md:w-3/4 mx-auto max-w-5xl bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+      
 
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">

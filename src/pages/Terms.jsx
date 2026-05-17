@@ -36,7 +36,7 @@ export default function Terms() {
   return (
     <>
       <main className="min-h-screen bg-black text-white pt-8 pb-4">
-        <div className="mx-auto max-w-[800px] px-6 py-12 text-center md:py-16">
+        <div className="mx-auto max-w-[800px] px-6 py-12  md:py-16">
           <h1 className="mb-8 text-4xl font-bold tracking-tight text-white md:text-[2.5rem]">
             Terms of Service
           </h1>

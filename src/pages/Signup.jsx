@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import { apiUrl, ENDPOINTS } from "../config/endpoints";
 
 export default function Signup() {
@@ -13,7 +12,6 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [statusCode, setStatusCode] = useState(null);
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -53,11 +51,7 @@ export default function Signup() {
 
       if (response.ok) {
         if (data.token) {
-          login({
-            token: data.token,
-            email: data?.user?.email || email,
-            name: data?.user?.name || name,
-          });
+          localStorage.setItem("token", data.token);
         }
         navigate("/verify-email-notice");
       } else {

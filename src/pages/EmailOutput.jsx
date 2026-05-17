@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Download, ChevronDown, ChevronUp } from "lucide-react"; // ضفت أيقونات جديدة
+import { toPng } from "html-to-image";
 
 const EmailOutput = ({ apiData }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAllUrls, setShowAllUrls] = useState(false); // حالة الـ Read More
+  const [showAllImages, setShowAllImages] = useState(false); // حالة الـ Read More للصور
+  const [downloading, setDownloading] = useState(false);
+  const reportRef = useRef(null);
 
   useEffect(() => {
     let finalData = apiData;
@@ -33,6 +37,7 @@ const EmailOutput = ({ apiData }) => {
   const numFiles = data?.num_files ?? 0;
   const numImages = (data?.num_images ?? 0) + (data?.image_urls?.length ?? 0);
   const urls = data?.urls || [];
+  const imageUrls = data?.image_urls || [];
 
   // Normalize files: backend may return plain strings ["file.pdf"] or objects [{filename, download_url, ...}]
   const files = (data?.files || []).map((f) =>
@@ -47,6 +52,44 @@ const EmailOutput = ({ apiData }) => {
   // تحديد الروابط اللي هتظهر (أول 5 لو مش ضاغط Read More)
   const displayedUrls = showAllUrls ? urls : urls.slice(0, 5);
 
+  const allImages = [
+    ...images.map((img) => ({ kind: "attached", img })),
+    ...imageUrls.map((url) => ({ kind: "external", url })),
+  ];
+  const displayedImages = showAllImages ? allImages : allImages.slice(0, 5);
+
+  const handleDownloadReport = async () => {
+    if (!data || downloading) return;
+
+    // Prefer backend-generated report when available
+    if (data?.download_all_url) {
+      window.open(data.download_all_url, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (!reportRef.current) return;
+
+    setDownloading(true);
+    try {
+      const pngDataUrl = await toPng(reportRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: "#000000",
+      });
+
+      const a = document.createElement("a");
+      a.href = pngDataUrl;
+      a.download = "email-report.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (e) {
+      console.error("Failed to download report image:", e);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
@@ -56,24 +99,27 @@ const EmailOutput = ({ apiData }) => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
-
-      <div className="max-w-5xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+    <div className="min-h-screen w-full max-w-[100vw] bg-black text-white px-4 sm:px-6 md:px-8 py-10">
+    <div className="w-full md:w-3/4 mx-auto max-w-5xl bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+      
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
           <h2 className="text-green-500 font-semibold text-lg">
             Email Malware Analysis Report
           </h2>
-          {data?.download_all_url ? (
-            <a href={data.download_all_url} className="bg-green-700 hover:bg-green-900 px-5 py-2 rounded-lg font-semibold flex items-center transition-colors">
-              <Download className="w-5 h-5 mr-2" /> Download Report
-            </a>
-          ) : (
-            <button className="bg-gray-800 text-gray-500 px-5 py-2 rounded-lg font-semibold flex items-center cursor-not-allowed opacity-50">
-              <Download className="w-5 h-5 mr-2" /> Download Report
-            </button>
-          )}
+          <button
+            onClick={handleDownloadReport}
+            disabled={!data || downloading}
+            className={`px-5 py-2 rounded-lg font-semibold flex items-center transition-colors ${
+              data && !downloading
+                ? "bg-green-700 hover:bg-green-900"
+                : "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
+            }`}
+          >
+            <Download className="w-5 h-5 mr-2" />{" "}
+            {downloading ? "Preparing..." : "Download Report"}
+          </button>
         </div>
 
         {/* ----------- 2 BOXES ----------- */}
@@ -145,38 +191,54 @@ const EmailOutput = ({ apiData }) => {
         {/* ----------- Images Section ----------- */}
         <div className="bg-[#111] p-6 rounded-xl border border-gray-800 mt-8">
           <h3 className="text-green-400 font-semibold mb-3">Images ({numImages})</h3>
-          {images.length === 0 && (!data?.image_urls || data.image_urls.length === 0) ? (
+          {allImages.length === 0 ? (
             <p className="text-gray-500 text-sm italic text-center py-4">No images found in this email.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Embedded/attached images */}
-              {images.map((img, i) => (
-                <div key={`attached-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
-                  <p className="text-gray-300 text-sm mb-2 truncate">{img.filename}</p>
-                  {img.encoded_image ? (
-                    <img src={`data:image/png;base64,${img.encoded_image}`} alt={img.filename} className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain" />
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {displayedImages.map((item, i) =>
+                  item.kind === "attached" ? (
+                    <div key={`attached-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
+                      <p className="text-gray-300 text-sm mb-2 truncate">{item.img.filename}</p>
+                      {item.img.encoded_image ? (
+                        <img src={`data:image/png;base64,${item.img.encoded_image}`} alt={item.img.filename} className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain" />
+                      ) : (
+                        <p className="text-gray-500 text-xs italic">Preview not available</p>
+                      )}
+                      {item.img.download_url && (
+                        <a href={item.img.download_url} download target="_blank" rel="noopener noreferrer" className="text-green-400 underline text-sm block mt-2 hover:text-green-300">
+                          Download Image
+                        </a>
+                      )}
+                    </div>
                   ) : (
-                    <p className="text-gray-500 text-xs italic">Preview not available</p>
+                    <div key={`external-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
+                      <img
+                        src={item.url}
+                        alt={`Image ${i + 1}`}
+                        className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain"
+                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
+                      />
+                      <p className="text-gray-500 text-xs italic hidden">Failed to load image</p>
+                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-green-400 underline text-xs block mt-2 hover:text-green-300 truncate">{item.url}</a>
+                    </div>
+                  )
+                )}
+              </div>
+
+              {allImages.length > 5 && (
+                <button 
+                  onClick={() => setShowAllImages(!showAllImages)}
+                  className="mt-4 text-green-500 text-xs font-bold flex items-center hover:text-green-400 transition-colors self-start"
+                >
+                  {showAllImages ? (
+                    <><ChevronUp className="w-4 h-4 mr-1" /> Show Less</>
+                  ) : (
+                    <><ChevronDown className="w-4 h-4 mr-1" /> Read More ({allImages.length - 5} more)</>
                   )}
-                  {img.download_url && (
-                    <a href={img.download_url} className="text-green-400 underline text-sm block mt-2 hover:text-green-300">Download Image</a>
-                  )}
-                </div>
-              ))}
-              {/* External images from HTML img tags */}
-              {(data?.image_urls || []).map((url, i) => (
-                <div key={`external-${i}`} className="bg-[#0e0e0e] p-3 rounded-lg text-center">
-                  <img
-                    src={url}
-                    alt={`Image ${i + 1}`}
-                    className="rounded-lg border border-gray-700 mx-auto max-h-48 object-contain"
-                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-                  />
-                  <p className="text-gray-500 text-xs italic hidden">Failed to load image</p>
-                  <a href={url} target="_blank" rel="noopener noreferrer" className="text-green-400 underline text-xs block mt-2 hover:text-green-300 truncate">{url}</a>
-                </div>
-              ))}
-            </div>
+                </button>
+              )}
+            </>
           )}
         </div>
 
@@ -196,15 +258,15 @@ const EmailOutput = ({ apiData }) => {
             <div className="w-40 h-40 rounded-full border-[10px] flex items-center justify-center transition-all duration-500" style={{ borderColor: !data ? "#333" : isSpam ? "#ff0000" : "#00ff00" }}>
               <div>
                 <p className="text-3xl font-bold">{spamScore}%</p>
-                <p className="text-gray-400 text-sm">Spam Score</p>
+                <p className="text-gray-400 text-sm">{isSpam ? "Spam Score" : "Safe"}</p>
               </div>
             </div>
           </div>
         </div>
 
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default EmailOutput;

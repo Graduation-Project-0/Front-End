@@ -182,7 +182,7 @@ body,
 .nav-logo-text {
   font-family: "Gargoyles", system-ui, sans-serif;
   font-size: clamp(1.05rem, 2.5vw, 1.45rem);
-  font-weight:bold;
+  font-weight:800;
   font-synthesis: weight;
   color: rgba(255, 255, 255, 0.92);
   transition: color 0.2s ease;

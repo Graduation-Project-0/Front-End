@@ -27,49 +27,39 @@ useEffect(() => {
 }, [location.search]);
 
 
-  const handleScan = async () => {
-    if (!url) return;
+const handleScan = async () => {
+  if (!url) return;
+  setLoading(true);
+  setError("");
 
-    setLoading(true);
-    setError("");
+  try {
+    const token = localStorage.getItem("token");
 
-    try {
-      const token = localStorage.getItem("token");
+    const standardRes = await fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_URL), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ url }),
+    });
 
-      const standardReq = fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_URL), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      const advancedReq = fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_URL), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      const [standardRes, advancedRes] = await Promise.all([standardReq, advancedReq]);
+    if (standardRes.status === 200) {
       const standardData = await standardRes.json();
-      const advancedData = await advancedRes.json();
-
       sessionStorage.setItem("scanResultStandard", JSON.stringify(standardData));
-      sessionStorage.setItem("scanResultAdvanced", JSON.stringify(advancedData));
-
+      sessionStorage.removeItem("scanResultAdvanced"); // clear any stale result
+      sessionStorage.setItem("pendingAdvancedUrl", url); // store for UrlAdvanced
       navigate("/urlstandard");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to scan the URL");
-    } finally {
-      setLoading(false);
+    } else {
+      setError("Scan failed. Please try again.");
     }
-  };
-
+  } catch (err) {
+    console.error(err);
+    setError("Failed to scan the URL");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="relative min-h-screen w-full max-w-[100vw] overflow-x-hidden text-white">
       <div className="pointer-events-none absolute inset-0 bg-[url('/service.png')] bg-cover bg-center" />
@@ -97,7 +87,7 @@ useEffect(() => {
           <button
             onClick={handleScan}
             disabled={loading}
-            className="shrink-0 cursor-pointer bg-green-700 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-green-900 disabled:opacity-50 sm:h-auto sm:px-6 sm:py-0"
+            className="cursor-pointer shrink-0 bg-green-700 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-green-900 disabled:opacity-50 sm:h-auto sm:px-6 sm:py-0"
           >
             {loading ? "Scanning..." : "Scan"}
           </button>

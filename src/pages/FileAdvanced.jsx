@@ -46,15 +46,8 @@ export default function Advanced() {
   }
 
   return (
-     <div className="min-h-screen bg-black text-white px-4 sm:px-6 py-10">
-      
-      {/* Logo Container */}
-      <div className="flex justify-center mb-10">
-
-      </div>
-
-
-      <div className="max-w-6xl mx-auto bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
+    <div className="min-h-screen w-full max-w-[100vw] bg-black text-white px-4 sm:px-6 md:px-8 py-10">
+      <div className="w-full md:w-3/4 mx-auto max-w-5xl bg-[#0d0d0d] rounded-xl p-5 sm:p-8 shadow-[0_0_25px_rgba(0,255,0,0.1)]">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">

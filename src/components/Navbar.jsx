@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Menu, X, Camera, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import NavBrandLink from "./NavBrandLink";
 import LogoutConfirmDialog from "./LogoutConfirmDialog";
@@ -11,17 +11,7 @@ export default function Navbar() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
   const navigate = useNavigate();
-  const {
-    displaySrc,
-    hasCustomAvatar,
-    avatarDisabled,
-    fileInputRef,
-    onFileChange,
-    openPicker,
-    disableAvatar,
-    enableAvatar,
-    clearAvatar,
-  } = useProfileAvatar();
+  const { displaySrc } = useProfileAvatar();
   const { isAuthenticated, logout } = useAuth();
   const [logoutLoading, setLogoutLoading] = useState(false);
   const profileRef = useRef(null);
@@ -68,15 +58,6 @@ export default function Navbar() {
       <nav
         className="fixed top-0 left-1/2 z-[100] flex w-[min(100%,calc(100vw-1rem))] max-w-[min(100%,80rem)] -translate-x-1/2 items-center justify-between overflow-visible rounded-2xl border-b border-[#1E7D04]/60 bg-black/80 px-4 py-2 backdrop-blur-md after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:shadow-[0_3px_6px_rgba(30,125,4,0.4)] after:content-[''] sm:px-6 md:px-10 lg:px-14"
       >
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        aria-label="Choose profile photo"
-        onChange={onFileChange}
-      />
-
       {/* Logo */}
       <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
         <NavBrandLink onNavigate={handleNavClick} />
@@ -128,12 +109,12 @@ export default function Navbar() {
             ref={profileRef}
             className="relative flex items-center gap-2"
           >
-            <div className="relative">
+            <div className="relative cursor-pointer">
               {displaySrc ? (
                 <button
                   type="button"
                   onClick={() => setProfileMenuOpen((v) => !v)}
-                  className="block rounded-full ring-2 ring-green-500/40 ring-offset-2 ring-offset-black/80 focus:outline-none focus-visible:ring-[#1E7D04]"
+                  className="block cursor-pointer rounded-full ring-2 ring-green-500/40 ring-offset-2 ring-offset-black/80 focus:outline-none focus-visible:ring-[#1E7D04]"
                   aria-expanded={profileMenuOpen}
                   aria-haspopup="menu"
                   aria-label="Account menu"
@@ -148,7 +129,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setProfileMenuOpen((v) => !v)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7D04]"
+                  className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7D04]"
                   aria-expanded={profileMenuOpen}
                   aria-haspopup="menu"
                   aria-label="Open account menu"
@@ -157,20 +138,6 @@ export default function Navbar() {
                 </button>
               )}
 
-              {!avatarDisabled && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setProfileMenuOpen(false);
-                    openPicker();
-                  }}
-                  className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full border border-black bg-[#1E7D04] text-white shadow-sm hover:bg-[#158003]"
-                  aria-label={hasCustomAvatar ? "Change profile photo" : "Add profile photo"}
-                >
-                  <Camera size={10} strokeWidth={2.5} />
-                </button>
-              )}
             </div>
 
             <div
@@ -190,48 +157,6 @@ export default function Navbar() {
                 <MenuLink to="/plans" label="Plans" onPick={() => setProfileMenuOpen(false)} />
                 <MenuLink to="/privacy" label="Privacy" onPick={() => setProfileMenuOpen(false)} />
                 <MenuLink to="/terms" label="Terms" onPick={() => setProfileMenuOpen(false)} />
-              </div>
-
-              <div className="mx-2 my-2 border-t border-white/10" />
-
-              <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Photo
-              </p>
-              <div className="flex flex-col gap-0.5 px-1.5">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileMenuOpen(false);
-                    openPicker();
-                  }}
-                  disabled={avatarDisabled}
-                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {hasCustomAvatar ? "Change photo" : "Add photo"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    clearAvatar();
-                    disableAvatar();
-                    setProfileMenuOpen(false);
-                  }}
-                  className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10"
-                >
-                  Remove photo
-                </button>
-                {avatarDisabled && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      enableAvatar();
-                      setProfileMenuOpen(false);
-                    }}
-                    className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-200 transition hover:bg-white/10"
-                  >
-                    Enable photo
-                  </button>
-                )}
               </div>
 
               <div className="mx-2 my-2 border-t border-white/10" />
@@ -315,7 +240,7 @@ export default function Navbar() {
               </>
             ) : (
               <div className="relative mx-auto flex w-full max-w-sm flex-col items-center gap-3 pt-1">
-                <div className="relative">
+                <div className="relative cursor-pointer">
                   {displaySrc ? (
                     <button
                       type="button"
@@ -323,7 +248,7 @@ export default function Navbar() {
                         navigate("/dashboard");
                         setIsOpen(false);
                       }}
-                      className="block rounded-full ring-2 ring-green-500/40"
+                      className="block cursor-pointer rounded-full ring-2 ring-green-500/40"
                       aria-label="Go to dashboard"
                     >
                       <img
@@ -339,23 +264,10 @@ export default function Navbar() {
                         navigate("/dashboard");
                         setIsOpen(false);
                       }}
-                      className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10"
+                      className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 border-green-500/35 bg-white/5 transition hover:bg-white/10"
                       aria-label="Go to dashboard"
                     >
                       <User size={22} className="text-gray-200" />
-                    </button>
-                  )}
-                  {!avatarDisabled && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openPicker();
-                      }}
-                      className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full border border-black bg-[#1E7D04] text-white shadow-sm"
-                      aria-label="Change profile photo"
-                    >
-                      <Camera size={10} strokeWidth={2.5} />
                     </button>
                   )}
                 </div>
