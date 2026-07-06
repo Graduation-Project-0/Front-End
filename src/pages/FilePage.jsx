@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiUrl, ENDPOINTS } from "../config/endpoints";
+import { setPendingAdvancedFile } from "../utils/pendingScanFile";
 
 export default function FilePage() {
   const [file, setFile] = useState(null);
@@ -45,41 +46,30 @@ export default function FilePage() {
     setIsScanning(true);
     setApiError("");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    const token = localStorage.getItem("token");
-
     try {
-      const standardReq = fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_FILE), {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const standardRes = await fetch(apiUrl(ENDPOINTS.STANDARD_SCAN_FILE), {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
-      const advancedReq = fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_FILE), {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-
-      const [standardRes, advancedRes] = await Promise.all([standardReq, advancedReq]);
-      const standardData = await standardRes.json();
-      const advancedData = await advancedRes.json();
-
-      if (!standardRes.ok || !advancedRes.ok) {
-        setApiError(standardData.message || advancedData.message || "Scan failed.");
-        setIsScanning(false);
-        return;
+      if (standardRes.status === 200) {
+        const standardData = await standardRes.json();
+        sessionStorage.setItem("standardScanData", JSON.stringify(standardData));
+        sessionStorage.removeItem("advancedScanData");
+        sessionStorage.setItem("fileName", file.name);
+        setPendingAdvancedFile(file);
+        navigate("/filestandard");
+      } else {
+        setApiError("Scan failed. Please try again.");
       }
-
-      sessionStorage.setItem("standardScanData", JSON.stringify(standardData));
-      sessionStorage.setItem("advancedScanData", JSON.stringify(advancedData));
-      sessionStorage.setItem("fileName", file.name);
-
-      navigate("/filestandard");
     } catch (err) {
       console.error(err);
-      setApiError("Connection error. Please try again.");
+      setApiError("Failed to scan the file");
     } finally {
       setIsScanning(false);
     }

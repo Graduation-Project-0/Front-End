@@ -1,24 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Download } from "lucide-react";
+import { apiUrl, ENDPOINTS } from "../config/endpoints";
+import { getPendingAdvancedFile } from "../utils/pendingScanFile";
 
 export default function Advanced() {
   const [scanData, setScanData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openVendors, setOpenVendors] = useState(true);
   const [openHash, setOpenHash] = useState(true);
+
   useEffect(() => {
-    const storedData = sessionStorage.getItem("advancedScanData");
-    if (storedData) {
+    const fetchAdvanced = async () => {
+      const file = getPendingAdvancedFile();
+      if (!file) return;
+
+      setLoading(true);
       try {
-        const parsed = JSON.parse(storedData);
+        const token = localStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch(apiUrl(ENDPOINTS.ADVANCED_SCAN_FILE), {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+        const json = await res.json();
+        sessionStorage.setItem("advancedScanData", JSON.stringify(json));
+        setScanData(json.data || json);
+      } catch (err) {
+        console.error("Advanced scan failed:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const cached = sessionStorage.getItem("advancedScanData");
+    if (!cached) {
+      fetchAdvanced();
+    } else {
+      try {
+        const parsed = JSON.parse(cached);
         setScanData(parsed.data || parsed);
       } catch (err) {
         console.error("Failed to parse advanced scan data:", err);
       }
+      setLoading(false);
     }
-    // Artificial delay for smoother transition
-    setTimeout(() => setLoading(false), 500);
   }, []);
 
   // --- Fallback Data Logic ---

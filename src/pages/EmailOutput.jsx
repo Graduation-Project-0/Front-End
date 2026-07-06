@@ -109,16 +109,15 @@ const EmailOutput = ({ apiData }) => {
             Email Malware Analysis Report
           </h2>
           <button
-            onClick={handleDownloadReport}
-            disabled={!data || downloading}
-            className={`px-5 py-2 rounded-lg font-semibold flex items-center transition-colors ${
-              data && !downloading
-                ? "bg-green-700 hover:bg-green-900"
-                : "bg-gray-800 text-gray-500 cursor-not-allowed opacity-50"
+            disabled={!data}
+            className={`cursor-pointer px-5 py-2 rounded-lg font-semibold flex items-center justify-center transition-colors ${
+              data
+                ? "bg-green-700 hover:bg-green-900 cursor-pointer text-white"
+                : "bg-gray-800 text-gray-500 cursor-not-allowed"
             }`}
           >
-            <Download className="w-5 h-5 mr-2" />{" "}
-            {downloading ? "Preparing..." : "Download Report"}
+            <Download className="w-5 h-5 mr-2" />
+            Download Report
           </button>
         </div>
 

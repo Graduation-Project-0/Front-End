@@ -512,9 +512,6 @@ export default function Dashboard() {
                   </table>
                 </div>
 
-                <button type="button" className="mt-4 w-full shrink-0 rounded-lg border border-green-500/20 bg-[#1db954]/10 py-2 font-bold text-green-500">
-                  View All
-                </button>
 
                 {hasMoreRecentScans && (
                   <button
