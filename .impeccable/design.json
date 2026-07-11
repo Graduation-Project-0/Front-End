@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-09T20:52:19Z",
+  "title": "Design System: Vanguard",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Vanguard Emerald",
+        "canonical": "oklch(51% 0.17 142)",
+        "tonalRamp": [
+          "#051a01",
+          "#0a3301",
+          "#124f02",
+          "#1e7d04",
+          "#2ba806",
+          "#45cf1d",
+          "#86f065",
+          "#cbfbc1"
+        ]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Pure Cyber Black",
+        "canonical": "oklch(0% 0 0)",
+        "tonalRamp": [
+          "#000000",
+          "#0c0c0c",
+          "#181818",
+          "#242424",
+          "#303030",
+          "#505050",
+          "#909090",
+          "#e0e0e0"
+        ]
+      },
+      "status-secure": {
+        "role": "tertiary",
+        "displayName": "Secure Green",
+        "canonical": "oklch(80% 0.18 142)",
+        "tonalRamp": [
+          "#062810",
+          "#0c5020",
+          "#147b32",
+          "#1ea845",
+          "#4ade80",
+          "#86efad",
+          "#bbf7d0",
+          "#f0fdf4"
+        ]
+      },
+      "status-warning": {
+        "role": "tertiary",
+        "displayName": "Threat Alert Red",
+        "canonical": "oklch(65% 0.22 25)",
+        "tonalRamp": [
+          "#2c0606",
+          "#580c0c",
+          "#881313",
+          "#b91c1c",
+          "#f87171",
+          "#fca5a5",
+          "#fecaca",
+          "#fef2f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Gargoyles",
+        "purpose": "Brand wordmarks and landing hero anchors."
+      },
+      "headline": {
+        "displayName": "Headline Sans",
+        "purpose": "Section headings and scanner page titles."
+      },
+      "body": {
+        "displayName": "Body Sans",
+        "purpose": "High-density telemetry prose and instructions."
+      }
+    },
+    "shadows": [
+      {
+        "name": "nav-glow",
+        "value": "0 3px 6px rgba(30, 125, 4, 0.4)",
+        "purpose": "Bottom border glow anchoring fixed navigation bar."
+      },
+      {
+        "name": "hero-glow",
+        "value": "0 0 10px rgba(30, 125, 4, 0.3)",
+        "purpose": "Text drop shadow for main hero titles."
+      },
+      {
+        "name": "dropdown-shadow",
+        "value": "0 10px 25px -5px rgba(0, 0, 0, 0.8)",
+        "purpose": "Elevation shadow separating modals from dark backgrounds."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default 300ms easing for interactive button and card hovers."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tactical emerald gradient pill button for primary calls to action.",
+      "html": "<button class=\"ds-btn-primary\">START SCAN</button>",
+      "css": ".ds-btn-primary { background: linear-gradient(to right, #1E7D04, #0A3301); color: #ffffff; padding: 14px 40px; border-radius: 9999px; font-weight: 600; font-size: 1.125rem; border: none; cursor: pointer; transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { opacity: 0.7; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #000000, 0 0 0 4px #22c55e; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Emerald outline pill button for secondary actions.",
+      "html": "<button class=\"ds-btn-ghost\">EXPLORE SERVICES</button>",
+      "css": ".ds-btn-ghost { background: transparent; border: 1px solid #1E7D04; color: #1E7D04; padding: 12px 40px; border-radius: 9999px; font-weight: 600; font-size: 1.125rem; cursor: pointer; transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-ghost:hover { background-color: #025714; color: #ffffff; }"
+    },
+    {
+      "name": "Scanner Dropzone Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Translucent dark glass dropzone card with emerald border luminosity.",
+      "html": "<div class=\"ds-scanner-card\"><svg width=\"36\" height=\"36\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#4ade80\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"17 8 12 3 7 8\"/><line x1=\"12\" y1=\"3\" x2=\"12\" y2=\"15\"/></svg><p class=\"ds-drop-title\">Drag and drop your suspicious file</p><p class=\"ds-drop-sub\">Supports EXE, PDF, DOCX up to 100MB</p></div>",
+      "css": ".ds-scanner-card { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(30, 125, 4, 0.5); border-radius: 16px; padding: 40px 24px; text-align: center; display: flex; flex-direction: column; items-center: center; justify-content: center; gap: 12px; cursor: pointer; transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1); } .ds-scanner-card:hover { background: rgba(0, 0, 0, 0.55); border-color: rgba(34, 197, 94, 0.8); } .ds-drop-title { color: rgba(255, 255, 255, 0.87); font-weight: 600; font-size: 1.125rem; margin: 0; } .ds-drop-sub { color: #9ca3af; font-size: 0.875rem; margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tactical Cyber Cockpit",
+    "overview": "Vanguard is designed as an engineered, high-precision defense console where every indicator serves immediate situational awareness and rapid threat response. Built on pure cyber black (#000000) with vibrant emerald and tactical green gradients (#1E7D04 to #0A3301), the interface conveys calm superiority and technical authority without sensory fatigue.",
+    "keyCharacteristics": [
+      "Committed Dark Identity: Pure black canvas paired with translucent surface layering to create depth without muddiness.",
+      "Tactical Emerald Focus: Controlled, purposeful use of green gradients and border glows to draw immediate focus to interactive dropzones.",
+      "Engineered Legibility: High contrast (≥4.5:1 body text) and non-color-only status indicators ensuring uncompromising WCAG AA compliance.",
+      "Responsive & Motion-Aware: Smooth micro-interactions and ambient particle glows that instantly adapt and respect prefers-reduced-motion."
+    ],
+    "rules": [
+      {
+        "name": "The Tactical Restraint Rule",
+        "body": "Primary emerald gradients (#1E7D04 to #0A3301) are reserved strictly for primary actions, scanner dropzones, and brand wordmarks. Never use green backgrounds as generic container fills or decorative padding.",
+        "section": "colors"
+      },
+      {
+        "name": "The Purposeful Display Rule",
+        "body": "The Gargoyles display typeface is restricted to brand wordmarks (.nav-logo-text) and major section anchors (.landing-section-title). All interactive forms, diagnostic tables, and telemetry charts must use the system sans-serif.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Canvas Rule",
+        "body": "Cards and containers never use heavy white or gray box-shadows. Elevation is expressed exclusively through border luminosity (border-[#1E7D04]/50) and subtle green glow diffusion on hover.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do maintain ≥4.5:1 contrast for all primary and secondary text against #000000 or #0c0c0c backgrounds.",
+      "Do pair icon + text badges alongside color when communicating scan results.",
+      "Do use rounded-full (9999px) for CTA buttons and rounded-2xl (16px) for cards and scanner dropzones.",
+      "Do wrap animated background effects in prefers-reduced-motion fallbacks.",
+      "Do enforce Gargoyles strictly on brand headings and section anchors while preserving system sans-serif for high-density telemetry."
+    ],
+    "donts": [
+      "Don't use generic corporate blue or purple gradients; Vanguard is strictly anchored in cyber black and tactical emerald.",
+      "Don't use border-radius: 32px+ on rectangular cards or containers; over-rounding destroys technical authority.",
+      "Don't pair border: 1px solid with wide, soft drop shadows; pick crisp border glows or flat layering.",
+      "Don't add repetitive all-caps small tracked eyebrows above every section heading.",
+      "Don't display raw, unstructured terminal log dumps on user-facing scan output pages without clear visual summaries."
+    ]
+  }
+}

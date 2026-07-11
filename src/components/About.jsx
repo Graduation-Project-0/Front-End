@@ -1,81 +1,114 @@
 import React from "react";
-import HomeLogoLink from "./HomeLogoLink";
 
 const About = () => {
   return (
-    <div
+    <section
       id="about"
-      className="relative flex min-h-screen w-full max-w-[100vw] flex-col items-center justify-center overflow-x-hidden bg-black p-6 font-sans text-white selection:bg-green-500/30 md:p-12"
+      className="relative flex min-h-screen w-full max-w-[100vw] flex-col items-center justify-center overflow-x-hidden bg-black p-6 font-sans text-white selection:bg-green-500/30 md:p-12 lg:py-24"
     >
-      
-      {/* Background Glows for atmosphere */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-green-900/10 blur-[120px] rounded-full pointer-events-none" />
+      {/* Ambient Background Glows */}
+      <div aria-hidden="true" className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#1E7D04]/15 blur-[140px] rounded-full pointer-events-none" />
 
-      {/* Main Header */}
-      <header className="relative z-10 mb-12 text-center">
-        <h1 className="landing-section-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(74,222,128,0.3)] py-2">
+      {/* Subtle Background Watermark Shield */}
+      <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-[0.03]">
+        <img
+          src="/Big Logo.svg"
+          alt=""
+          className="w-[500px] max-w-none blur-[1px]"
+        />
+      </div>
+
+      {/* Section Header */}
+      <header className="relative z-10 mb-14 md:mb-20 text-center max-w-3xl mx-auto">
+        <h2 className="landing-section-title text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-white tracking-tight drop-shadow-[0_0_15px_rgba(30,125,4,0.4)] py-2">
           Guardians of The Digital Frontier
-        </h1>
+        </h2>
+        <p className="mt-4 text-[#9ca3af] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+          An AI-powered cybersecurity platform engineered to identify and
+          neutralize sophisticated digital threats before they compromise your
+          infrastructure.
+        </p>
       </header>
 
-      {/* Content Grid */}
-      <main className="relative z-10 mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 items-center gap-8 lg:grid-cols-3">
-        
-        {/* LEFT COLUMN: Top Left & Bottom Left */}
-        <div className="flex flex-col gap-12 order-2 lg:order-1">
-          {/* Top Left Card */}
-          <div className="bg-green-950/10 border border-green-900 p-6 rounded-2xl backdrop-blur-sm hover:border-green-500/60 transition-all duration-700">
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-     Vanguard is an AI-powered cybersecurity platform that helps individuals and organizations identify and prevent digital threats before they cause harm.
+      {/* Tactical 2-Column Grid */}
+      <main className="relative z-10 mx-auto grid w-full min-w-0 max-w-5xl grid-cols-1 items-stretch gap-8 md:grid-cols-2 lg:gap-10">
+        {/* Card 01: Proactive Threat Intelligence */}
+        <div className="group relative flex flex-col justify-between rounded-2xl bg-black/40 border border-[#1E7D04]/25 p-8 sm:p-10 backdrop-blur-md transition-all duration-200 hover:border-[#1E7D04]/60 hover:bg-black/60 hover:shadow-[0_10px_30px_rgba(30,125,4,0.15)]">
+          {/* Subtle Top Accent Line */}
+          <div aria-hidden="true" className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-[#1E7D04]/40 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#22c55e] font-semibold tabular-nums">
+                01 · TACTICAL CAPABILITIES
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1E7D04]/20 border border-[#1E7D04]/40 px-2.5 py-0.5 text-xs font-medium text-[#4ade80]">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+                Active Analysis
+              </span>
+            </div>
+
+            <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 leading-snug tracking-tight">
+              Proactive Threat Intelligence
+            </h3>
+
+            <p className="text-[#9ca3af] leading-relaxed text-base">
+              Vanguard combines machine learning algorithms with real-time
+              diagnostic telemetry to identify zero-day anomalies, malicious
+              file structures, and phishing domains instantly. We transform
+              complex security data into clear, high-precision verdicts.
             </p>
           </div>
 
-          {/* Bottom Left Card */}
-          <div className="bg-green-950/10 border border-green-900 p-6 rounded-2xl backdrop-blur-sm hover:border-green-500/60 transition-all duration-700">
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-           Our platform uses AI and machine learning to detect threats and deliver clear insights through standard and advanced analysis.
-            </p>
+          <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-xs font-mono tabular-nums tracking-wide text-[#9ca3af]/80">
+            <span>Scan Engine v3.9</span>
+            <span className="text-[#22c55e] transition-colors duration-200 group-hover:text-white">
+              Sub-second detection →
+            </span>
           </div>
         </div>
 
-        {/* CENTER COLUMN: The Logo */}
- <div className="flex justify-center items-center order-1 lg:order-2 py-8 lg:py-0">
-          <div className="relative group">
+        {/* Card 02: Our Mission & Vision */}
+        <div className="group relative flex flex-col justify-between rounded-2xl bg-black/40 border border-[#1E7D04]/25 p-8 sm:p-10 backdrop-blur-md transition-all duration-200 hover:border-[#1E7D04]/60 hover:bg-black/60 hover:shadow-[0_10px_30px_rgba(30,125,4,0.15)]">
+          {/* Subtle Top Accent Line */}
+          <div aria-hidden="true" className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-[#1E7D04]/40 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
 
-            <div className="absolute inset-0 bg-green-500/10 rounded-full blur-[100px] animate-pulse" />
-            
-            <HomeLogoLink className="relative block">
-              <img
-                src="/Big Logo.svg"
-                alt="Vanguard Shield Logo"
-                className="relative mx-auto h-auto w-full max-w-[min(18rem,88vw)] drop-shadow-[0_0_35px_rgba(34,150,94,0.5)] transition-transform duration-700 group-hover:scale-105 md:max-w-none md:w-[450px]"
-              />
-            </HomeLogoLink>
-          </div>
-        </div>
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#22c55e] font-semibold tabular-nums">
+                02 · DEFENSE MANDATE
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1E7D04]/20 border border-[#1E7D04]/40 px-2.5 py-0.5 text-xs font-medium text-[#4ade80]">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+                Zero Complexity
+              </span>
+            </div>
 
-        {/* RIGHT COLUMN: Top Right & Bottom Right */}
-        <div className="flex flex-col gap-12 order-3">
-          {/* Top Right Card */}
-          <div className="bg-green-950/10 border border-green-900 p-6 rounded-2xl backdrop-blur-sm hover:border-green-500/60 transition-all duration-700">
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-            With cyberattacks becoming more frequent and sophisticated, Vanguard enables users to identify malicious URLs and files through fast, intelligent analysis.
+            <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 leading-snug tracking-tight">
+              Our Mission &amp; Vision
+            </h3>
+
+            <p className="text-[#9ca3af] leading-relaxed text-base">
+              As cyberattacks grow in velocity and sophistication,
+              enterprise-grade protection must not be locked behind impenetrable
+              technical jargon. Our vision is to democratize elite
+              cybersecurity—establishing Vanguard as an intuitive, authoritative
+              first line of defense accessible to everyone.
             </p>
           </div>
 
-          {/* Bottom Right Card */}
-          <div className="bg-green-950/10 border border-green-900 p-6 rounded-2xl backdrop-blur-sm hover:border-green-500/60 transition-all duration-700">
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-            Our vision is to simplify cybersecurity and make it accessible to all, establishing Vanguard as a proactive first line of defense in the digital world.
-            </p>
+          <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-xs font-mono tabular-nums tracking-wide text-[#9ca3af]/80">
+            <span>Deployment Architecture</span>
+            <span className="text-[#22c55e] transition-colors duration-200 group-hover:text-white">
+              Proactive protection →
+            </span>
           </div>
         </div>
-
       </main>
 
       {/* Decorative Bottom Line */}
-      <footer className="mt-16 w-32 h-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent" />
-    </div>
+      <hr aria-hidden="true" className="mt-20 w-32 h-1 border-0 bg-gradient-to-r from-transparent via-[#1E7D04]/60 to-transparent" />
+    </section>
   );
 };
 

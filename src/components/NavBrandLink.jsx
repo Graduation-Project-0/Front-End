@@ -32,7 +32,7 @@ export default function NavBrandLink({ onNavigate, className = "" }) {
         className="nav-logo-icon"
         loading="eager"
       />
-      <span className="nav-logo-text pt-4">ANGUARD</span>
+      <span className="nav-logo-text tracking-wide">ANGUARD</span>
     </Link>
   );
 }
