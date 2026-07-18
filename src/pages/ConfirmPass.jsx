@@ -1,5 +1,3 @@
-
-
 export default function ConfirmPass() {
   return (
     <div className="min-h-screen flex items-center justify-center  text-white relative overflow-hidden animate-fadeUp">
@@ -9,7 +7,7 @@ export default function ConfirmPass() {
       <div className="relative z-10 bg-[#111111]/70 backdrop-blur-md p-10 rounded-3xl shadow-[0_0_30px_rgba(0,255,0,0.1)] w-[90%] max-w-md text-center border border-green-800/30">
         <h2 className="text-2xl font-bold mb-2">Reset Password</h2>
         <p className="text-gray-400 text-sm mb-8">
-      We are exclited to have your black log in now and access your account 
+          We are exclited to have your black log in now and access your account
           <br />
         </p>
 
@@ -34,9 +32,7 @@ export default function ConfirmPass() {
           </div>
         </div>
         {/*reset button */}
-        <button
-          className="w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white hover:opacity-80 transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]"
-        >
+        <button className="w-full bg-gradient-to-r from-[#1E7D04] to-[#0A3301] py-3 rounded-full font-semibold text-white hover:opacity-80 transition-all duration-300 shadow-[0_0_20px_rgba(30,125,4,0.3)]">
           Reset
         </button>
       </div>

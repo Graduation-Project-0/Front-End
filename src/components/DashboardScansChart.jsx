@@ -35,23 +35,25 @@ function filterChartDataByRange(fullData, range, year) {
   return fullData.slice(startIdx, endIdx + 1);
 }
 
-function MonthScansTooltipBody({ monthName, chartYear, displayed, valueLabel }) {
+function MonthScansTooltipBody({
+  monthName,
+  chartYear,
+  displayed,
+  valueLabel,
+}) {
   return (
-    <div
-      className="grid min-w-[8rem] gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-2 text-xs shadow-md"
-      style={{ backgroundColor: "#ffffff", border: "1px solid #e5e5e5", color: "#000000" }}
-    >
-      <div className="font-medium text-neutral-600">
+    <div className="grid min-w-[8rem] gap-1.5 rounded-lg border border-[#1e7d04]/50 bg-[#0c0c0c] px-2.5 py-2 text-xs shadow-[0_10px_25px_-5px_rgba(0,0,0,0.8)]">
+      <div className="font-medium text-[#9ca3af]">
         {monthName} {chartYear}
       </div>
-      <div className="flex items-center gap-2 font-bold text-black">
+      <div className="flex items-center gap-2 font-bold text-white">
         <span
-          className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#7CFF8A]"
+          className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#22c55e]"
           aria-hidden
         />
         <span>
           {displayed}{" "}
-          <span className="font-medium text-neutral-700">{valueLabel}</span>
+          <span className="font-medium text-[#9ca3af]">{valueLabel}</span>
         </span>
       </div>
     </div>
@@ -79,7 +81,10 @@ function ChartExportMonthTooltips({
         const heightRatio =
           scansChartYMax > 0 ? Math.min(1, scans / scansChartYMax) : 0;
         const bottom = plotBottom + heightRatio * plotHeight;
-        const { monthName, displayed, valueLabel } = getTooltipProps(row, row.name);
+        const { monthName, displayed, valueLabel } = getTooltipProps(
+          row,
+          row.name,
+        );
         return (
           <div
             key={`${row.name}-${chartYear}`}
@@ -109,7 +114,7 @@ export default function DashboardScansChart({
 
   const filteredData = useMemo(
     () => filterChartDataByRange(chartData, timeRange, chartYear),
-    [chartData, timeRange, chartYear]
+    [chartData, timeRange, chartYear],
   );
 
   const exportData = exportChartTooltips
@@ -118,7 +123,7 @@ export default function DashboardScansChart({
 
   const scansMax = exportData.reduce(
     (m, d) => Math.max(m, Number(d.scans) || 0),
-    0
+    0,
   );
   const scansChartYMax = scansMax > 0 ? scansMax : 5;
 
@@ -145,7 +150,7 @@ export default function DashboardScansChart({
     const point = payload[0]?.payload ?? {};
     const { monthName, displayed, valueLabel } = getMonthScansTooltipProps(
       point,
-      label
+      label,
     );
     return (
       <MonthScansTooltipBody
@@ -165,10 +170,12 @@ export default function DashboardScansChart({
         : "Last 3 months";
 
   return (
-    <div className="flex min-h-[280px] flex-col rounded-2xl border border-gray-900 bg-[#0d0d0d] lg:col-span-2 lg:h-full lg:min-h-0">
+    <div className="flex min-h-[280px] flex-col rounded-2xl border border-gray-900 bg-[#0d0d0d] transition-all duration-300 hover:border-[#1E7D04]/40 hover:shadow-[0_4px_24px_rgba(30,125,4,0.15)] lg:col-span-2 lg:h-full lg:min-h-0">
       <div className="flex shrink-0 flex-col gap-2 border-b border-gray-900 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
         <div className="grid flex-1 gap-1">
-          <h3 className="font-bold tracking-wide text-gray-100">Scans by month</h3>
+          <h3 className="font-bold tracking-wide text-gray-100">
+            Scans by month
+          </h3>
           <p className="text-xs text-gray-500">
             Monthly scan activity in {chartYear}
             {timeRange !== "year" ? ` · ${rangeLabel}` : ""}
@@ -203,19 +210,29 @@ export default function DashboardScansChart({
             margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
           >
             <defs>
-              <linearGradient id="dashboardScansFillInteractive" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#7CFF8A" stopOpacity={0.55} />
-                <stop offset="95%" stopColor="#7CFF8A" stopOpacity={0.05} />
+              <linearGradient
+                id="dashboardScansFillInteractive"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor="#22c55e" stopOpacity={0.55} />
+                <stop offset="95%" stopColor="#22c55e" stopOpacity={0.05} />
               </linearGradient>
             </defs>
-            <CartesianGrid stroke="#2a2a2a" vertical={false} strokeDasharray="4 4" />
+            <CartesianGrid
+              stroke="#2a2a2a"
+              vertical={false}
+              strokeDasharray="4 4"
+            />
             <XAxis
               dataKey="name"
               tickLine={false}
               axisLine={false}
               tickMargin={10}
               minTickGap={24}
-              stroke="#6b7280"
+              stroke="#9ca3af"
               tick={{ fontSize: 11, fill: "#9ca3af" }}
             />
             <YAxis
@@ -224,27 +241,31 @@ export default function DashboardScansChart({
               width={32}
               allowDecimals={false}
               domain={[0, scansChartYMax]}
-              stroke="#6b7280"
-              tick={{ fontSize: 10, fill: "#6b7280" }}
+              stroke="#9ca3af"
+              tick={{ fontSize: 10, fill: "#9ca3af" }}
             />
             <Tooltip
               content={renderTooltip}
-              cursor={{ stroke: "#7CFF8A", strokeOpacity: 0.35, strokeWidth: 1 }}
+              cursor={{
+                stroke: "#22c55e",
+                strokeOpacity: 0.35,
+                strokeWidth: 1,
+              }}
             />
             <Area
               type="natural"
               dataKey="scans"
-              stroke="#7CFF8A"
+              stroke="#22c55e"
               strokeWidth={2}
               fill="url(#dashboardScansFillInteractive)"
               fillOpacity={1}
               baseValue={0}
               isAnimationActive={!exportChartTooltips}
-              dot={{ fill: "#7CFF8A", r: 3, strokeWidth: 0 }}
+              dot={{ fill: "#22c55e", r: 3, strokeWidth: 0 }}
               activeDot={{
                 r: 5,
-                fill: "#7CFF8A",
-                stroke: "#e8ffe8",
+                fill: "#22c55e",
+                stroke: "#4ade80",
                 strokeWidth: 2,
               }}
             />

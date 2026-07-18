@@ -262,7 +262,7 @@ const HowItWorks = () => {
               {/* Simulated Terminal Log */}
               <div className="p-5 rounded-xl bg-black/80 border border-green-900/50 font-mono text-xs sm:text-sm space-y-3">
                 <div className="flex items-center justify-between text-gray-400 pb-2 border-b border-green-900/30">
-                  <span>> DIAGNOSTIC_CHECKS // ACTIVE_LAYER</span>
+                  <span>&gt; DIAGNOSTIC_CHECKS // ACTIVE_LAYER</span>
                   <span className="text-green-500">LATENCY: {currentStep.telemetry.latency}</span>
                 </div>
 
